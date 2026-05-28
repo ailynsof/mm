@@ -1,0 +1,3162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subway Colombia – Estrategia de Medios y MMM (v2)</title>
+  
+  <!-- Google Fonts: Inter para la tipografía premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =========================================================================
+       SISTEMA DE DISEÑO Y VARIABLES DE ESTILO
+       ========================================================================= */
+    :root {
+      --green-subway: #009B3A;
+      --yellow-subway: #FFC423;
+      --white: #FFFFFF;
+      --black: #1A1A1A;
+      --grey-medium: #6B6B6B;
+      --green-dark: #007A2E;
+      --green-soft: #E8F5EE;
+      --yellow-soft: #FFFBE6;
+      --grey-light: #F5F5F5;
+      --font-family: 'Inter', sans-serif;
+      --transition-speed: 0.5s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0b0c0b;
+      font-family: var(--font-family);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+      color: var(--black);
+      user-select: none;
+    }
+
+    /* CONTENEDOR PRINCIPAL RESPONSIVE 16:9 */
+    .presentation-container {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+      overflow: hidden;
+      background-color: var(--white);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      transform-origin: center center;
+      border-radius: 8px;
+    }
+
+    /* DIAPOSITIVAS */
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 50px 30px 50px;
+      background-color: var(--white);
+      z-index: 1;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 2;
+    }
+
+    /* CLASES DE FONDOS */
+    .slide.bg-green {
+      background-color: var(--green-subway);
+      color: var(--white);
+    }
+
+    .slide.bg-black {
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    .slide.bg-grey {
+      background-color: var(--grey-light);
+      color: var(--black);
+    }
+
+    /* HEADER DE DIAPOSITIVAS DE CONTENIDO */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--grey-light);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .slide-title-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 900px;
+    }
+
+    .slide-hook {
+      font-size: 23px;
+      font-weight: 700;
+      color: var(--green-subway);
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+    }
+    
+    .slide.bg-grey .slide-hook {
+      color: var(--green-subway);
+    }
+
+    .slide-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--grey-medium);
+    }
+
+    /* LOGOTIPO SUBWAY ESTILIZADO */
+    .subway-logo {
+      font-family: var(--font-family);
+      font-weight: 900;
+      font-style: italic;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      letter-spacing: -1px;
+    }
+
+    .logo-asterisk {
+      color: var(--yellow-subway);
+      font-size: 28px;
+      line-height: 0;
+      margin-top: 6px;
+    }
+
+    .logo-sub {
+      color: var(--green-subway);
+    }
+
+    .logo-way {
+      color: var(--yellow-subway);
+    }
+
+    .slide.bg-green .logo-sub, .slide.bg-black .logo-sub {
+      color: var(--white);
+    }
+
+    /* BODY DE LAS DIAPOSITIVAS */
+    .slide-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 0; /* Permite scroll interno si es necesario y evita desbordamiento */
+    }
+
+    /* PIE DE PÁGINA */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--grey-medium);
+      border-top: 1px solid var(--grey-light);
+      padding-top: 10px;
+      margin-top: 12px;
+    }
+
+    .slide.bg-green .slide-footer, .slide.bg-black .slide-footer {
+      color: rgba(255, 255, 255, 0.6);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* CONTROLES DE NAVEGACIÓN OVERLAY */
+    .controls-overlay {
+      position: absolute;
+      bottom: 25px;
+      right: 30px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
+    }
+
+    .control-btn {
+      background-color: rgba(26, 26, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .control-btn:hover {
+      background-color: var(--green-subway);
+      transform: scale(1.05);
+    }
+
+    .control-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* BARRA DE PROGRESO INFERIOR */
+    .progress-bar-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background-color: rgba(224, 224, 224, 0.3);
+      display: flex;
+      z-index: 999;
+    }
+
+    .progress-segment {
+      flex: 1;
+      height: 100%;
+      background-color: transparent;
+      transition: background-color 0.3s;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .progress-segment.active {
+      background-color: var(--green-subway);
+    }
+
+    .progress-segment.current {
+      background-color: var(--yellow-subway);
+    }
+
+    /* COMPONENTES DE GRID Y LAYOUT */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      height: 100%;
+    }
+
+    .grid-55-45 {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: 24px;
+      height: 100%;
+    }
+
+    /* METRIC CARDS */
+    .metric-cards-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .metric-card {
+      background-color: var(--grey-light);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 4px solid var(--green-subway);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .metric-label {
+      font-size: 11.5px;
+      color: var(--grey-medium);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    /* CONTENEDORES DE GRÁFICOS Y SVG */
+    .chart-container {
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      min-height: 0;
+    }
+
+    .chart-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px solid var(--grey-light);
+      padding-bottom: 5px;
+    }
+
+    .chart-canvas-wrapper {
+      position: relative;
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    /* RECUADRO AMARILLO INFERIOR (INSIGHT BOX) */
+    .insight-box {
+      background-color: var(--yellow-soft);
+      border: 1px solid rgba(255, 196, 35, 0.3);
+      border-left: 5px solid var(--yellow-subway);
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--black);
+      font-weight: 500;
+      box-shadow: 0 2px 6px rgba(255, 196, 35, 0.05);
+    }
+
+    /* TOOLTIP GLOBAL */
+    #chart-tooltip {
+      position: absolute;
+      background-color: rgba(26, 26, 26, 0.95);
+      color: var(--white);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      line-height: 1.4;
+      border-left: 3px solid var(--yellow-subway);
+    }
+
+    /* PORTADA SLIDE */
+    .portada-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      gap: 20px;
+    }
+
+    .portada-logo {
+      width: 380px;
+      margin-bottom: 15px;
+    }
+
+    .portada-title {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1.5px;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .portada-subtitle {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--yellow-subway);
+      margin-top: -5px;
+    }
+
+    .portada-divider {
+      width: 140px;
+      height: 4px;
+      background-color: var(--yellow-subway);
+      border-radius: 2px;
+    }
+
+    .portada-authors {
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 15px;
+      font-weight: 500;
+    }
+
+    /* LA GRAN IDEA SLIDE */
+    .idea-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding: 0 30px;
+      gap: 25px;
+    }
+
+    .idea-highlight {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--white);
+      letter-spacing: -1.5px;
+    }
+
+    .idea-highlight span {
+      background-color: var(--yellow-subway);
+      color: var(--black);
+      padding: 3px 12px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .idea-text {
+      font-size: 19px;
+      line-height: 1.65;
+      color: #BBBBBB;
+      max-width: 950px;
+      font-weight: 400;
+    }
+
+    /* BARRAS HORIZONTALES CON CSS ANIMADO */
+    .horizontal-bars {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 100%;
+      padding: 5px 0;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 3px 6px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .bar-row:hover {
+      background-color: var(--grey-light);
+    }
+
+    .bar-label {
+      width: 90px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .bar-track {
+      flex-grow: 1;
+      height: 14px;
+      background-color: #E6E6E6;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 10px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .bar-value {
+      width: 48px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--grey-medium);
+      text-align: right;
+    }
+
+    .bar-row:hover .bar-value {
+      color: var(--black);
+    }
+
+    /* DONUTS DE SOI */
+    .donuts-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 100%;
+    }
+
+    .donut-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+
+    .donut-graphic {
+      width: 90px;
+      height: 90px;
+      position: relative;
+    }
+
+    .donut-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .donut-legend {
+      flex-grow: 1;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .donut-legend-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .donut-legend-text {
+      font-size: 9.5px;
+      color: var(--grey-medium);
+      line-height: 1.3;
+    }
+
+    /* MAPA DE COLOMBIA */
+    .map-region {
+      transition: fill 0.3s, opacity 0.3s;
+      cursor: pointer;
+    }
+
+    .map-region:hover {
+      opacity: 0.85;
+      stroke: var(--yellow-subway);
+      stroke-width: 2px;
+    }
+
+    .map-scale-legend {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-size: 9px;
+      color: var(--grey-medium);
+      padding: 0 10px;
+      width: 100%;
+    }
+
+    .map-scale-bar {
+      height: 6px;
+      flex-grow: 1;
+      margin: 0 10px;
+      background: linear-gradient(to right, #E8F5EE, #B3E8C8, #4DBF7F, #009B3A, #003D17);
+      border-radius: 3px;
+    }
+
+    /* GRÁFICO 12 MESES COMBINADO */
+    .monthly-chart-rect {
+      transition: fill 0.3s;
+      cursor: pointer;
+    }
+    
+    .monthly-chart-rect:hover {
+      fill: #B0B0B0 !important;
+    }
+
+    .monthly-chart-rect.highlight-dec:hover {
+      fill: #E5AF1F !important;
+    }
+
+    .monthly-hover-trigger {
+      fill: transparent;
+      cursor: pointer;
+    }
+
+    /* DIAGRAMA MODELO VARIABLES */
+    .model-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: var(--grey-light);
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid #E0E0E0;
+    }
+
+    .model-column.border-green {
+      background-color: var(--green-soft);
+      border-color: rgba(0, 155, 58, 0.2);
+    }
+
+    .model-column.border-yellow {
+      background-color: var(--yellow-soft);
+      border-color: rgba(255, 196, 35, 0.2);
+    }
+
+    .model-column-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+    
+    .model-column.border-green .model-column-title { color: var(--green-dark); }
+    .model-column.border-yellow .model-column-title { color: #8A6D00; }
+    .model-column.border-grey .model-column-title { color: var(--grey-medium); }
+
+    .model-card {
+      background: var(--white);
+      border: 1px solid #EAEAEA;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      line-height: 1.4;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .model-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    }
+
+    .model-card-title {
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 3px;
+      font-size: 11.5px;
+    }
+
+    .model-card-detail {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      color: var(--grey-medium);
+      font-size: 10px;
+      margin-top: 0;
+    }
+
+    .model-card:hover .model-card-detail {
+      max-height: 80px;
+      opacity: 1;
+      margin-top: 5px;
+    }
+
+    /* FLECHA CONVERGIENTE Y KPI BOX */
+    .convergence-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 4px 0;
+    }
+
+    .kpi-central-box {
+      background-color: var(--green-subway);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 15px;
+      border: 2px solid var(--yellow-subway);
+      box-shadow: 0 4px 12px rgba(0, 155, 58, 0.15);
+    }
+
+    /* RESERVED MMM PLACEHOLDERS */
+    .mmm-placeholders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    .mmm-placeholder-card {
+      background: var(--white);
+      border: 2px dashed var(--green-subway);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      position: relative;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .mmm-placeholder-card:hover {
+      box-shadow: 0 6px 15px rgba(0, 155, 58, 0.15);
+      border-color: var(--green-dark);
+      transform: translateY(-2px);
+    }
+
+    .mmm-placeholder-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 2;
+    }
+
+    .chart-error-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      text-align: center;
+      z-index: 1;
+      background: var(--white);
+    }
+
+    .chart-placeholder-svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 8px;
+    }
+
+    .chart-placeholder-text {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.3;
+    }
+
+    /* FALLBACK DE IMÁGENES GENÉRICAS */
+    .img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .img-wrapper img {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+
+    .image-error-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--white);
+      border: 2px dashed var(--green-subway);
+      border-radius: 6px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .placeholder-svg {
+      width: 40px;
+      height: 32px;
+      margin-bottom: 6px;
+    }
+
+    .placeholder-text {
+      font-size: 10px;
+      color: var(--grey-medium);
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .placeholder-text span {
+      font-family: 'Fira Code', monospace;
+      color: var(--green-subway);
+      font-weight: 700;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* ARQUETIPOS */
+    .archetype-card {
+      border: 1px solid #E0E0E0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background: var(--white);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .archetype-card.target-primary {
+      border: 2px solid var(--yellow-subway);
+      background-color: var(--yellow-soft);
+    }
+
+    .archetype-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .archetype-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green-subway);
+    }
+
+    .archetype-card.target-primary .archetype-name {
+      color: var(--green-dark);
+    }
+
+    .archetype-badge {
+      background-color: var(--yellow-subway);
+      color: var(--black);
+      font-size: 7.5px;
+      font-weight: 700;
+      padding: 1.5px 5px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .archetype-body-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .archetype-img-frame {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background-color: var(--grey-light);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid #DDD;
+    }
+
+    .archetype-audience {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.1;
+    }
+
+    .archetype-audience span {
+      font-size: 10px;
+      color: var(--grey-medium);
+      font-weight: 500;
+      display: block;
+    }
+
+    .archetype-details {
+      font-size: 9.5px;
+      color: var(--black);
+      line-height: 1.35;
+    }
+
+    .archetype-details strong {
+      color: var(--grey-medium);
+      font-weight: 600;
+    }
+
+    /* SCATTER PLOT */
+    .scatter-grid-line {
+      stroke: #E5E5E5;
+      stroke-width: 1px;
+      stroke-dasharray: 2 2;
+    }
+
+    .scatter-axis {
+      stroke: var(--grey-medium);
+      stroke-width: 1.5px;
+    }
+
+    .scatter-point {
+      cursor: pointer;
+      transition: r 0.2s, stroke-width 0.2s;
+    }
+
+    .scatter-point:hover {
+      r: 10;
+      stroke-width: 2.5px;
+      stroke: #000;
+    }
+
+    .scatter-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* BARRIERS OF CONVERSION */
+    .barrier-card {
+      display: flex;
+      align-items: center;
+      background: var(--grey-light);
+      border-left: 5px solid var(--green-subway);
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      gap: 15px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      max-height: 60px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .barrier-card:hover {
+      max-height: 150px;
+      background-color: var(--green-soft);
+      border-left-color: var(--yellow-subway);
+      box-shadow: 0 4px 10px rgba(0, 155, 58, 0.08);
+      transform: translateX(4px);
+    }
+
+    .barrier-number {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--yellow-subway);
+      min-width: 55px;
+      line-height: 1;
+      text-shadow: 1px 1px 0px rgba(0,0,0,0.05);
+    }
+
+    .barrier-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .barrier-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.3;
+    }
+
+    .barrier-arquetipo {
+      font-size: 9px;
+      color: var(--grey-medium);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .barrier-solution {
+      font-size: 10px;
+      color: var(--green-dark);
+      font-weight: 600;
+      margin-top: 6px;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      background-color: var(--white);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 155, 58, 0.15);
+    }
+
+    .barrier-card:hover .barrier-solution {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* BENCHMARK BLOCKS */
+    .benchmark-block {
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.01);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .benchmark-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .benchmark-country {
+      font-weight: 700;
+      font-size: 11.5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .benchmark-bar-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .benchmark-bar-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--grey-medium);
+    }
+
+    .benchmark-details {
+      font-size: 10px;
+      color: var(--black);
+      line-height: 1.35;
+    }
+
+    .benchmark-learning {
+      font-size: 9.5px;
+      color: var(--green-dark);
+      background-color: var(--green-soft);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+
+    /* TESTIMONIOS SLIDE */
+    .testimonial-card {
+      background-color: var(--grey-light);
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid #EAEAEA;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+    }
+
+    .testimonial-card:hover {
+      background-color: var(--white);
+      border-color: var(--green-subway);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 155, 58, 0.08);
+    }
+
+    .testimonial-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 8px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    
+    .badge-fit { background-color: var(--green-soft); color: var(--green-dark); }
+    .badge-ofi { background-color: #E8F0FE; color: #1A73E8; }
+    .badge-caz { background-color: var(--yellow-soft); color: #8A6D00; }
+    .badge-fam { background-color: #FEEAD3; color: #E67C00; }
+
+    .testimonial-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: #E2E2E2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid #DDD;
+      flex-shrink: 0;
+    }
+
+    .testimonial-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .testimonial-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .testimonial-city {
+      font-size: 9.5px;
+      color: var(--grey-medium);
+      font-weight: 500;
+    }
+
+    .testimonial-quote {
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: #333333;
+      font-style: italic;
+      flex-grow: 1;
+      border-left: 2.5px solid #D0D0D0;
+      padding-left: 10px;
+    }
+
+    .testimonial-card:hover .testimonial-quote {
+      border-left-color: var(--green-subway);
+    }
+
+    .methodology-strip {
+      background-color: var(--grey-light);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 11px;
+      color: var(--grey-medium);
+      font-weight: 500;
+      line-height: 1.4;
+      border: 1px solid #EAEAEA;
+    }
+
+    /* ESTRATEGIA DE COMUNICACIÓN TABLE */
+    .table-container {
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--grey-light);
+      border-radius: 8px;
+    }
+
+    .strategy-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.5px;
+      text-align: left;
+    }
+
+    .strategy-table th {
+      background-color: var(--green-subway);
+      color: var(--white);
+      font-weight: 700;
+      padding: 10px 12px;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--green-dark);
+    }
+
+    .strategy-table td {
+      padding: 10px 12px;
+      border-bottom: 1.5px solid #EAEAEA;
+      line-height: 1.4;
+      vertical-align: top;
+      transition: all 0.2s ease;
+    }
+
+    .strategy-table tr:nth-child(even) td {
+      background-color: #FAFAFA;
+    }
+
+    /* Hover interactivo en filas */
+    .strategy-table tr {
+      border-left: 4px solid transparent;
+      transition: all 0.2s ease;
+    }
+    
+    .strategy-table tr:hover {
+      border-left: 4px solid var(--yellow-subway);
+    }
+    
+    .strategy-table tr:hover td {
+      background-color: var(--yellow-soft) !important;
+    }
+
+    .strategy-table tr.row-target td {
+      background-color: var(--green-soft);
+    }
+
+    .strategy-table tr.row-target:hover td {
+      background-color: var(--yellow-soft);
+    }
+
+    /* FORMATOS POR CLUSTER */
+    .format-column {
+      background-color: var(--grey-light);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      height: 100%;
+      border-top: 4px solid var(--grey-medium);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+    }
+
+    .format-column.col-fit { border-top-color: var(--green-subway); }
+    .format-column.col-ofi { border-top-color: #2563EB; }
+    .format-column.col-caz { border-top-color: var(--yellow-subway); }
+    .format-column.col-fam { border-top-color: #F97316; }
+
+    .format-column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #E2E2E2;
+    }
+
+    .format-column-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .format-card {
+      background: var(--white);
+      border-radius: 6px;
+      padding: 6px 10px;
+      border: 1px solid #EAEAEA;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .format-card:hover {
+      transform: translateY(-1px);
+      border-color: var(--green-subway);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .format-icon-frame {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background-color: var(--grey-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .format-icon-svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--grey-medium);
+    }
+
+    .format-info {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      min-width: 0;
+    }
+
+    .format-name {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--black);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .format-spec {
+      font-size: 8px;
+      color: var(--grey-medium);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .format-prod-note {
+      font-size: 8.5px;
+      color: var(--grey-medium);
+      font-style: italic;
+      margin-top: 3px;
+      border-top: 1px dashed #EEE;
+      padding-top: 2px;
+      line-height: 1.1;
+    }
+
+    .format-strip {
+      background-color: var(--green-soft);
+      border: 1.5px solid rgba(0, 155, 58, 0.15);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--green-dark);
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    /* CIERRE SLIDE */
+    .cierre-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      gap: 22px;
+      padding: 0 40px;
+    }
+
+    .cierre-title {
+      font-size: 54px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+    }
+
+    .cierre-highlight {
+      font-size: 54px;
+      font-weight: 900;
+      color: var(--yellow-subway);
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-top: -10px;
+    }
+
+    .cierre-text {
+      font-size: 18.5px;
+      line-height: 1.65;
+      color: #CCCCCC;
+      max-width: 900px;
+      font-weight: 400;
+    }
+
+    .cierre-divider {
+      width: 140px;
+      height: 3px;
+      background-color: var(--yellow-subway);
+      border-radius: 2px;
+      margin: 10px 0;
+    }
+
+    /* =========================================================================
+       ANIMACIONES CSS Y EFECTOS DE ENTRADA
+       ========================================================================= */
+    /* Estilos iniciales */
+    .slide .metric-card {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .slide.active .metric-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide.active .metric-card:nth-child(1) { transition-delay: 0.1s; }
+    .slide.active .metric-card:nth-child(2) { transition-delay: 0.2s; }
+    .slide.active .metric-card:nth-child(3) { transition-delay: 0.3s; }
+    .slide.active .metric-card:nth-child(4) { transition-delay: 0.4s; }
+
+    /* Relleno horizontal de barras */
+    .slide .bar-fill {
+      width: 0% !important;
+      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .slide.active .bar-fill {
+      width: var(--width) !important;
+    }
+    .slide.active .bar-row:nth-child(1) .bar-fill { transition-delay: 0.1s; }
+    .slide.active .bar-row:nth-child(2) .bar-fill { transition-delay: 0.18s; }
+    .slide.active .bar-row:nth-child(3) .bar-fill { transition-delay: 0.26s; }
+    .slide.active .bar-row:nth-child(4) .bar-fill { transition-delay: 0.34s; }
+    .slide.active .bar-row:nth-child(5) .bar-fill { transition-delay: 0.42s; }
+
+    /* Relleno vertical de barras (Diapositiva 4) */
+    .slide .monthly-chart-rect {
+      height: 0px !important;
+      y: 210px !important;
+      transition: height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), y 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .slide.active .monthly-chart-rect {
+      height: var(--height) !important;
+      y: var(--y) !important;
+    }
+    /* Retardo secuencial de las 12 barras */
+    .slide.active .m-bar-1  { transition-delay: 0.03s; }
+    .slide.active .m-bar-2  { transition-delay: 0.06s; }
+    .slide.active .m-bar-3  { transition-delay: 0.09s; }
+    .slide.active .m-bar-4  { transition-delay: 0.12s; }
+    .slide.active .m-bar-5  { transition-delay: 0.15s; }
+    .slide.active .m-bar-6  { transition-delay: 0.18s; }
+    .slide.active .m-bar-7  { transition-delay: 0.21s; }
+    .slide.active .m-bar-8  { transition-delay: 0.24s; }
+    .slide.active .m-bar-9  { transition-delay: 0.27s; }
+    .slide.active .m-bar-10 { transition-delay: 0.30s; }
+    .slide.active .m-bar-11 { transition-delay: 0.33s; }
+    .slide.active .m-bar-12 { transition-delay: 0.36s; }
+
+    /* Línea de tendencia mensual SVG */
+    .slide .monthly-trend-path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      transition: stroke-dashoffset 1.2s ease-in-out;
+      transition-delay: 0.4s;
+    }
+    .slide.active .monthly-trend-path {
+      stroke-dashoffset: 0;
+    }
+    
+    .slide .trend-node {
+      opacity: 0;
+      transform: scale(0);
+      transform-origin: center;
+      transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .slide.active .trend-node {
+      opacity: 1;
+      transform: scale(1);
+    }
+    /* Retardo de nodos de tendencia después de que la línea se dibuje */
+    .slide.active .n-1  { transition-delay: 0.45s; }
+    .slide.active .n-2  { transition-delay: 0.50s; }
+    .slide.active .n-3  { transition-delay: 0.55s; }
+    .slide.active .n-4  { transition-delay: 0.60s; }
+    .slide.active .n-5  { transition-delay: 0.65s; }
+    .slide.active .n-6  { transition-delay: 0.70s; }
+    .slide.active .n-7  { transition-delay: 0.75s; }
+    .slide.active .n-8  { transition-delay: 0.80s; }
+    .slide.active .n-9  { transition-delay: 0.85s; }
+    .slide.active .n-10 { transition-delay: 0.90s; }
+    .slide.active .n-11 { transition-delay: 0.95s; }
+    .slide.active .n-12 { transition-delay: 1.00s; }
+
+    /* Relleno de Donut SVG */
+    .slide .donut-segment {
+      stroke-dashoffset: 188.5;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .slide.active .donut-segment {
+      stroke-dashoffset: var(--final-offset);
+    }
+    .slide.active .donut-item:nth-child(1) .donut-segment { transition-delay: 0.2s; }
+    .slide.active .donut-item:nth-child(2) .donut-segment { transition-delay: 0.4s; }
+
+    /* Flechas de flujo modelo */
+    .slide .flow-arrow-path {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      transition: stroke-dashoffset 1s ease-in-out;
+      transition-delay: 0.4s;
+    }
+    .slide.active .flow-arrow-path {
+      stroke-dashoffset: 0;
+    }
+
+    /* Scatter Plot Nodos */
+    .slide .scatter-point {
+      opacity: 0;
+      transform: scale(0);
+      transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .slide.active .scatter-point {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .slide.active .sp-1 { transition-delay: 0.2s; }
+    .slide.active .sp-2 { transition-delay: 0.4s; }
+    .slide.active .sp-3 { transition-delay: 0.6s; }
+    .slide.active .sp-4 { transition-delay: 0.8s; }
+
+    /* Tarjetas de Arquetipos y Barreras (Entrada slide-up) */
+    .slide .slide-up-card {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.active .slide-up-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide.active .sc-1 { transition-delay: 0.1s; }
+    .slide.active .sc-2 { transition-delay: 0.22s; }
+    .slide.active .sc-3 { transition-delay: 0.34s; }
+    .slide.active .sc-4 { transition-delay: 0.46s; }
+
+    /* Diapositiva 2 - Entrada secuencial de líneas de texto */
+    .slide .seq-line {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.active .seq-line {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide.active .sl-1 { transition-delay: 0.2s; }
+    .slide.active .sl-2 { transition-delay: 0.5s; }
+    .slide.active .sl-3 { transition-delay: 0.8s; }
+
+    /* Diapositiva 12 - Entrada secuencial final */
+    .slide .cierre-seq {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.active .cierre-seq {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide.active .cs-1 { transition-delay: 0.2s; }
+    .slide.active .cs-2 { transition-delay: 0.6s; }
+    .slide.active .cs-3 { transition-delay: 1.0s; }
+    .slide.active .cs-4 { transition-delay: 1.4s; }
+    
+    /* Columnas de formatos de publicidad */
+    .slide .format-column-box {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.active .format-column-box {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide.active .fc-1 { transition-delay: 0.1s; }
+    .slide.active .fc-2 { transition-delay: 0.25s; }
+    .slide.active .fc-3 { transition-delay: 0.4s; }
+    .slide.active .fc-4 { transition-delay: 0.55s; }
+
+  </style>
+</head>
+<body>
+
+  <!-- CONTENEDOR MÁSTER DE LA PRESENTACIÓN (16:9 RESPONSIVE) -->
+  <div class="presentation-container">
+    
+    <!-- TOOLTIP CONECTOR GLOBAL -->
+    <div id="chart-tooltip"></div>
+
+    <!-- BARRA DE PROGRESO INFERIOR (Generada dinámicamente) -->
+    <div class="progress-bar-container" id="progress-bar"></div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 1 — PORTADA
+         ======================================================================= -->
+    <!-- ===== SLIDE 1: PORTADA ===== -->
+    <div class="slide bg-green active" id="slide-1">
+      <div></div> <!-- Espaciador superior -->
+      <div class="portada-content">
+        <!-- Logotipo grande Subway en blanco y amarillo -->
+        <svg class="portada-logo" viewBox="0 0 320 80" width="350">
+          <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+            <text x="10" y="60" fill="#FFC423">SUB</text>
+            <text x="138" y="60" fill="#FFFFFF">WAY</text>
+          </g>
+          <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+          <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#FFFFFF" />
+        </svg>
+        <div class="portada-title cierre-seq cs-1">Estrategia de Medios y MMM</div>
+        <div class="portada-subtitle cierre-seq cs-2">Subway Colombia · 2025–2026</div>
+        <div class="portada-divider cierre-seq cs-3"></div>
+        <div class="portada-authors cierre-seq cs-4">Ailyn Gómez · Naomi Mosquera</div>
+      </div>
+      <div class="slide-footer" style="border-top: none;">
+        <span>CONFIDENCIAL — PROPIEDAD DE SUBWAY® COLOMBIA</span>
+        <span class="slide-counter-display">DIAPOSITIVA 1 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 2 — LA GRAN IDEA
+         ======================================================================= -->
+    <!-- ===== SLIDE 2: LA GRAN IDEA ===== -->
+    <div class="slide bg-black" id="slide-2">
+      <div></div>
+      <div class="idea-content">
+        <div class="idea-highlight seq-line sl-1">
+          El mapa miente. Subway es famoso donde <span>no tiene restaurantes</span>.
+        </div>
+        <div class="idea-text seq-line sl-2">
+          Subway Colombia es altamente eficiente capturando búsquedas orgánicas en la periferia donde no enfrenta competencia física, pero es invisible en Bogotá, Medellín y Cali — los tres mercados que concentran el 70% del PIB de la categoría — porque destina el 99.53% de su pauta a televisión masiva desalineada estacionalmente, cediendo el ecosistema digital a McDonald's.
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PARADOJA DE NOTORIEDAD — ANÁLISIS DE PARTIDA</span>
+        <span class="slide-counter-display">DIAPOSITIVA 2 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 3 — KPI SHARE OF SEARCH vs SOI
+         ======================================================================= -->
+    <!-- ===== SLIDE 3: EL MERCADO CRECE. SUBWAY NO. ===== -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">El mercado crece al 6.4%. Subway lleva 66 semanas con el KPI plano.</div>
+          <div class="slide-subtitle">Desbalance estructural entre notoriedad e inversión publicitaria (SOI vs SOS)</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- ZONA SUPERIOR: 4 METRIC CARDS CON CONTADOR JS -->
+        <div class="metric-cards-row">
+          <div class="metric-card">
+            <div class="metric-value count-up" data-target="1964.3" data-prefix="USD " data-suffix="M">USD 0.0M</div>
+            <div class="metric-label">Mercado QSR Colombia</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value count-up" data-target="6.4" data-pct="true">0.0%</div>
+            <div class="metric-label">CAGR Proyección a 2035</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value count-up" data-target="3.5" data-pct="true">0.0%</div>
+            <div class="metric-label">Market Share Subway</div>
+          </div>
+          <div class="metric-card" style="border-left-color: var(--yellow-subway);">
+            <div class="metric-value count-up" data-target="11.9" data-negative="true" data-pct="true">-0.0%</div>
+            <div class="metric-label">Confianza Consumidor (ICC)</div>
+          </div>
+        </div>
+
+        <!-- ZONA MEDIA: GRÁFICOS LADO A LADO -->
+        <div class="grid-2" style="flex-grow: 1; min-height: 220px; max-height: 260px;">
+          
+          <!-- SOS Promedio 66 semanas (Barras horizontales) -->
+          <div class="chart-container">
+            <div class="chart-title">Share of Search (SOS) promedio 66 semanas</div>
+            <div class="horizontal-bars">
+              
+              <!-- McDonald's -->
+              <div class="bar-row" onmousemove="showTooltip(event, 'McDonald\'s', 'SOS promedio: 34.85% (Líder absoluto)')" onmouseleave="hideTooltip()">
+                <div class="bar-label">McDonald's</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="--width: 34.85%; background-color: #D0D0D0;"></div>
+                </div>
+                <div class="bar-value">34.85%</div>
+              </div>
+              
+              <!-- Domino's -->
+              <div class="bar-row" onmousemove="showTooltip(event, 'Domino\'s', 'SOS promedio: 24.92% (Fuerte conversión digital)')" onmouseleave="hideTooltip()">
+                <div class="bar-label">Domino's</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="--width: 24.92%; background-color: #D0D0D0;"></div>
+                </div>
+                <div class="bar-value">24.92%</div>
+              </div>
+
+              <!-- KFC -->
+              <div class="bar-row" onmousemove="showTooltip(event, 'KFC', 'SOS promedio: 23.99% (Alta presión offline)')" onmouseleave="hideTooltip()">
+                <div class="bar-label">KFC</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="--width: 23.99%; background-color: #D0D0D0;"></div>
+                </div>
+                <div class="bar-value">23.99%</div>
+              </div>
+
+              <!-- Subway (Verde) -->
+              <div class="bar-row" onmousemove="showTooltip(event, 'Subway', 'SOS promedio: 9.26% (Eficiencia orgánica alta, pauta nula)')" onmouseleave="hideTooltip()">
+                <div class="bar-label" style="color: var(--green-subway); font-weight: 900;">Subway</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="--width: 9.26%; background-color: var(--green-subway);"></div>
+                </div>
+                <div class="bar-value" style="color: var(--green-subway); font-weight: 900;">9.26%</div>
+              </div>
+
+              <!-- Burger King -->
+              <div class="bar-row" onmousemove="showTooltip(event, 'Burger King', 'SOS promedio: 6.99%')" onmouseleave="hideTooltip()">
+                <div class="bar-label">Burger King</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="--width: 6.99%; background-color: #D0D0D0;"></div>
+                </div>
+                <div class="bar-value">6.99%</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SOI Tradicional vs SOI Digital (Donuts) -->
+          <div class="chart-container">
+            <div class="chart-title">Participación de la Inversión (SOI) Tradicional vs Digital</div>
+            <div class="donuts-wrapper">
+              
+              <!-- Donut Tradicional -->
+              <div class="donut-item">
+                <div class="donut-graphic" onmousemove="showTooltip(event, 'Gasto Tradicional', 'Total categoría: $34.5B COP<br>KFC 39.42% · McD 33.62% · Frisby 16.23% · Domino\'s 4.64% · Qbano 2.90% · BK 1.75% · <strong>Subway 1.44%</strong>')" onmouseleave="hideTooltip()">
+                  <svg class="donut-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="30" fill="none" stroke="#F0F0F0" stroke-width="12" />
+                    <!-- McDonald's (33.62%) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="#7A7A7A" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 125.1; transform: rotate(-90deg); transform-origin: center;" />
+                    <!-- KFC (39.42%) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="#4A4A4A" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 114.2; transform: rotate(31deg); transform-origin: center;" />
+                    <!-- Frisby (16.23%) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="#A0A0A0" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 157.9; transform: rotate(173deg); transform-origin: center;" />
+                    <!-- Domino's (4.64%) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="#C0C0C0" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 179.7; transform: rotate(231deg); transform-origin: center;" />
+                    <!-- Subway (1.44% - Verde) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="var(--green-subway)" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 185.8; transform: rotate(248deg); transform-origin: center;" />
+                    <text x="50" y="55" font-family="'Inter', sans-serif" font-size="11" font-weight="900" text-anchor="middle" fill="var(--green-subway)">1.44%</text>
+                  </svg>
+                </div>
+                <div class="donut-legend">
+                  <div class="donut-legend-title">SOI Tradicional (Histórico)</div>
+                  <div class="donut-legend-text">Inversión dominada por KFC y McDonald's. Subway participa con apenas el <strong>1.44%</strong> ($497M).</div>
+                </div>
+              </div>
+
+              <!-- Donut Digital -->
+              <div class="donut-item">
+                <div class="donut-graphic" onmousemove="showTooltip(event, 'Gasto Digital', 'Total categoría: $2.48B COP<br><strong>McDonald\'s 83.68%</strong> · Qbano 7.25% · Domino\'s 6.03% · KFC 1.54% · <strong>Subway 0.94%</strong>')" onmouseleave="hideTooltip()">
+                  <svg class="donut-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="30" fill="none" stroke="#F0F0F0" stroke-width="12" />
+                    <!-- McDonald's (83.68% - Amarillo) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="var(--yellow-subway)" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 30.8; transform: rotate(-90deg); transform-origin: center;" />
+                    <!-- Qbano (7.25%) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="#6B6B6B" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 174.8; transform: rotate(211deg); transform-origin: center;" />
+                    <!-- Domino's (6.03%) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="#9A9A9A" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 177.1; transform: rotate(237deg); transform-origin: center;" />
+                    <!-- Subway (0.94% - Verde) -->
+                    <circle class="donut-segment" cx="50" cy="50" r="30" fill="none" stroke="var(--green-subway)" stroke-width="12" stroke-dasharray="188.5" style="--final-offset: 186.7; transform: rotate(259deg); transform-origin: center;" />
+                    <text x="50" y="55" font-family="'Inter', sans-serif" font-size="11" font-weight="900" text-anchor="middle" fill="var(--green-subway)">0.94%</text>
+                  </svg>
+                </div>
+                <div class="donut-legend">
+                  <div class="donut-legend-title">SOI Digital (Q1 2026)</div>
+                  <div class="donut-legend-text">McDonald's satura el <strong>83.7%</strong> ($2,080M). Subway es invisible con el <strong>0.94%</strong> ($23.4M).</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ZONA INFERIOR: INSIGHT BOX -->
+        <div class="insight-box">
+          La brecha digital con McDonald's es de <strong>88.9x</strong>. Subway captura el <strong>9.26%</strong> de las búsquedas totales del sector invirtiendo solo el <strong>0.94%</strong> del presupuesto digital de la categoría — pero carece de pauta pagada estructurada para interceptarlas y defenderlas.
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Fuentes: Google Trends (66 semanas), Infoanálisis y Admetricks Colombia (Ene 2025 - Mar 2026).</span>
+        <span class="slide-counter-display">DIAPOSITIVA 3 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 4 — TRAMPA GEOGRÁFICA Y ESTACIONAL
+         ======================================================================= -->
+    <!-- ===== SLIDE 4: TRAMPA GEOGRÁFICA Y DESAJUSTE ESTACIONAL ===== -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">Relevante donde no hay caja. Invisible donde está el PIB.</div>
+          <div class="slide-subtitle">Alta demanda orgánica en regiones sin restaurante. Cero inversión en diciembre.</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <div class="grid-2" style="flex-grow: 1; min-height: 0;">
+          
+          <!-- COLUMNA IZQUIERDA: MAPA GEOMÉTRICO COLOMBIA SVG -->
+          <div class="chart-container">
+            <div class="chart-title">Intensidad de Búsqueda Orgánica por Región (SOS)</div>
+            <div class="chart-canvas-wrapper" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 10px;">
+              
+              <!-- Mapa SVG Simplificado -->
+              <svg viewBox="0 0 400 450" width="220" height="230" style="overflow: visible;">
+                <!-- San Andrés (41% SOS - Verde muy oscuro) -->
+                <rect class="map-region" x="40" y="30" width="32" height="32" rx="6" fill="#003D17" stroke="#fff" stroke-width="1.5"
+                      onmousemove="showTooltip(event, 'San Andrés y Providencia', 'SOS: 41.0%<br>Clasificación: Periférico (Baja Población)<br>Competencia Física: Nula')" onmouseleave="hideTooltip()" />
+                <text x="56" y="50" font-family="'Inter', sans-serif" font-size="9" font-weight="900" fill="#fff" text-anchor="middle">S.A.</text>
+                <text x="56" y="75" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="var(--grey-medium)" text-anchor="middle">41%</text>
+
+                <!-- La Guajira (21% SOS) -->
+                <polygon class="map-region" points="250,20 290,10 270,40 230,40" fill="#005C22" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'La Guajira', 'SOS: 21.0%<br>Clasificación: Periférico')" onmouseleave="hideTooltip()" />
+                
+                <!-- Cesar (16% SOS) -->
+                <polygon class="map-region" points="230,40 250,60 235,95 215,60" fill="#009B3A" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'Cesar', 'SOS: 16.0%<br>Clasificación: Periférico')" onmouseleave="hideTooltip()" />
+
+                <!-- Sucre (18% SOS) -->
+                <polygon class="map-region" points="150,55 190,40 215,60 190,80 155,70" fill="#007A2E" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'Sucre / Atlántico / Bolivar', 'SOS promedio de costa: 18.0%<br>Clasificación: Periférico / Medio')" onmouseleave="hideTooltip()" />
+
+                <!-- Antioquia (9% SOS) -->
+                <polygon class="map-region" points="140,90 180,90 190,135 140,145 125,115" fill="#4DBF7F" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'Antioquia', 'SOS: 9.0%<br>Clasificación: <strong>PRIORIDAD ALTA</strong><br>Población: 6.8M (DANE)')" onmouseleave="hideTooltip()" />
+                <text x="160" y="118" font-family="'Inter', sans-serif" font-size="9" font-weight="900" fill="#fff" text-anchor="middle">ANT (9%)</text>
+
+                <!-- Bogotá (7% SOS - Verde muy suave) -->
+                <polygon class="map-region" points="185,135 220,150 205,205 170,190" fill="#B3E8C8" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'Bogotá D.C. & Cundinamarca', 'SOS: 7.0%<br>Clasificación: <strong>PRIORIDAD MÁXIMA</strong><br>Población: 8.3M (DANE)<br>Eficiencia: Invisible ante McDonald\'s')" onmouseleave="hideTooltip()" />
+                <!-- Pin decorativo en Bogotá -->
+                <circle cx="195" cy="170" r="5" fill="var(--yellow-subway)" stroke="#009B3A" stroke-width="1" />
+                <text x="238" y="174" font-family="'Inter', sans-serif" font-size="9" font-weight="900" fill="var(--green-dark)">BOG (7%)</text>
+
+                <!-- Valle del Cauca (8% SOS) -->
+                <polygon class="map-region" points="110,185 145,180 135,225 105,215" fill="#80D4A4" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'Valle del Cauca', 'SOS: 8.0%<br>Clasificación: <strong>PRIORIDAD ALTA</strong><br>Población: 4.8M')" onmouseleave="hideTooltip()" />
+                <text x="96" y="180" font-family="'Inter', sans-serif" font-size="9" font-weight="900" fill="var(--green-dark)" text-anchor="middle">VALLE (8%)</text>
+
+                <!-- Resto del país (Representado como bloque del sur y oriente - Verde claro) -->
+                <polygon class="map-region" points="205,205 340,240 310,340 240,380 170,300" fill="#E8F5EE" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'Resto de Colombia', 'SOS promedio: &lt; 5%<br>Gran área geográfica pero baja concentración de PIB de categoría')" onmouseleave="hideTooltip()" />
+                <text x="250" y="280" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#6B6B6B">Orinoquía / Amazonía</text>
+
+                <!-- Bloque Pacifico/Nariño -->
+                <polygon class="map-region" points="105,215 135,225 170,300 120,340 85,300" fill="#E8F5EE" stroke="#fff" stroke-width="1.5"
+                         onmousemove="showTooltip(event, 'Pacífico Sur', 'SOS promedio: &lt; 6%')" onmouseleave="hideTooltip()" />
+              </svg>
+
+              <!-- Leyenda de colores del mapa -->
+              <div class="map-scale-legend">
+                <span>7% SOS (PIB Urbano Alto)</span>
+                <div class="map-scale-bar"></div>
+                <span>41% SOS (Periférico)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: GRÁFICO COMBINADO DE 12 MESES -->
+          <div class="chart-container">
+            <div class="chart-title">Inversión Subway vs Demanda (12 Meses)</div>
+            <div class="chart-canvas-wrapper">
+              <svg viewBox="0 0 520 220" width="100%" height="100%" style="overflow: visible;">
+                <!-- Líneas horizontales de guía -->
+                <line x1="40" y1="30" x2="480" y2="30" stroke="#EAEAEA" stroke-width="1" />
+                <line x1="40" y1="75" x2="480" y2="75" stroke="#EAEAEA" stroke-width="1" />
+                <line x1="40" y1="120" x2="480" y2="120" stroke="#EAEAEA" stroke-width="1" />
+                <line x1="40" y1="165" x2="480" y2="165" stroke="#EAEAEA" stroke-width="1" />
+                <line x1="40" y1="210" x2="480" y2="210" stroke="#CCCCCC" stroke-width="1.5" />
+
+                <!-- EJE Y Izquierdo (Gasto) -->
+                <text x="32" y="34" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="end">$600M</text>
+                <text x="32" y="124" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="end">$300M</text>
+                <text x="32" y="214" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="end">$0 COP</text>
+
+                <!-- EJE Y Derecho (SOS) -->
+                <text x="488" y="34" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--green-subway)">18%</text>
+                <text x="488" y="124" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--green-subway)">14%</text>
+                <text x="488" y="214" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--green-subway)">10%</text>
+
+                <!-- barras de Inversión (Gris) -->
+                <!-- Jan ($542M -> h=162.6px), Feb ($591 -> h=177.3), Mar ($591 -> h=177.3), Apr ($542 -> h=162.6), May ($493 -> h=147.9), Jun ($444 -> h=133.2), Jul ($394 -> h=118.2), Aug ($296 -> h=88.8), Sep ($296 -> h=88.8), Oct ($246 -> h=73.8), Nov ($296 -> h=88.8), Dec ($197 -> h=59.1) -->
+                <!-- ajustar con datos reales -->
+                <rect class="monthly-chart-rect m-bar-1" x="50" y="210" width="16" height="162.6" fill="#D0D0D0" rx="3" style="--height: 162.6px; --y: 47.4px;" />
+                <rect class="monthly-chart-rect m-bar-2" x="86" y="210" width="16" height="177.3" fill="#D0D0D0" rx="3" style="--height: 177.3px; --y: 32.7px;" />
+                <rect class="monthly-chart-rect m-bar-3" x="122" y="210" width="16" height="177.3" fill="#D0D0D0" rx="3" style="--height: 177.3px; --y: 32.7px;" />
+                <rect class="monthly-chart-rect m-bar-4" x="158" y="210" width="16" height="162.6" fill="#D0D0D0" rx="3" style="--height: 162.6px; --y: 47.4px;" />
+                <rect class="monthly-chart-rect m-bar-5" x="194" y="210" width="16" height="147.9" fill="#D0D0D0" rx="3" style="--height: 147.9px; --y: 62.1px;" />
+                <rect class="monthly-chart-rect m-bar-6" x="230" y="210" width="16" height="133.2" fill="#D0D0D0" rx="3" style="--height: 133.2px; --y: 76.8px;" />
+                <rect class="monthly-chart-rect m-bar-7" x="266" y="210" width="16" height="118.2" fill="#D0D0D0" rx="3" style="--height: 118.2px; --y: 91.8px;" />
+                <rect class="monthly-chart-rect m-bar-8" x="302" y="210" width="16" height="88.8"  fill="#D0D0D0" rx="3" style="--height: 88.8px;  --y: 121.2px;" />
+                <rect class="monthly-chart-rect m-bar-9" x="338" y="210" width="16" height="88.8"  fill="#D0D0D0" rx="3" style="--height: 88.8px;  --y: 121.2px;" />
+                <rect class="monthly-chart-rect m-bar-10" x="374" y="210" width="16" height="73.8" fill="#D0D0D0" rx="3" style="--height: 73.8px;  --y: 136.2px;" />
+                <rect class="monthly-chart-rect m-bar-11" x="410" y="210" width="16" height="88.8" fill="#D0D0D0" rx="3" style="--height: 88.8px;  --y: 121.2px;" />
+                
+                <!-- Diciembre destacado en amarillo para desajuste -->
+                <rect class="monthly-chart-rect m-bar-12 highlight-dec" x="446" y="210" width="16" height="59.1" fill="var(--yellow-subway)" rx="3" style="--height: 59.1px; --y: 150.9px;" />
+
+                <!-- Línea verde superpuesta para SOS mensual -->
+                <!-- Puntos calculados en Y para SOS: Jan: 114.4, Feb: 125.6, Mar: 122.3, Apr: 120.0, May: 148.1, Jun: 106.5, Jul: 103.1, Aug: 88.5, Sep: 91.9, Oct: 75.0, Nov: 75.0, Dec: 66.0 -->
+                <path class="monthly-trend-path" d="M 58,114.4 L 94,125.6 L 130,122.3 L 166,120.0 L 202,148.1 L 238,106.5 L 274,103.1 L 310,88.5 L 346,91.9 L 382,75.0 L 418,75.0 L 454,66.0" 
+                      fill="none" stroke="var(--green-subway)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+                <!-- Círculos de nodos de tendencia (Con animación CSS scale) -->
+                <circle class="trend-node n-1" cx="58" cy="114.4" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-2" cx="94" cy="125.6" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-3" cx="130" cy="122.3" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-4" cx="166" cy="120.0" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-5" cx="202" cy="148.1" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-6" cx="238" cy="106.5" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-7" cx="274" cy="103.1" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-8" cx="310" cy="88.5"  r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-9" cx="346" cy="91.9"  r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-10" cx="382" cy="75.0" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                <circle class="trend-node n-11" cx="418" cy="75.0" r="4.5" fill="var(--white)" stroke="var(--green-subway)" stroke-width="2.5" />
+                
+                <!-- Nodo de Diciembre destacado -->
+                <circle class="trend-node n-12" cx="454" cy="66.0" r="6" fill="var(--yellow-subway)" stroke="var(--green-subway)" stroke-width="2.5" />
+
+                <!-- EJE X - MESES -->
+                <text x="58" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Ene</text>
+                <text x="94" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Feb</text>
+                <text x="130" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Mar</text>
+                <text x="166" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Abr</text>
+                <text x="202" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">May</text>
+                <text x="238" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Jun</text>
+                <text x="274" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Jul</text>
+                <text x="310" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Ago</text>
+                <text x="346" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Sep</text>
+                <text x="382" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Oct</text>
+                <text x="418" y="222" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--grey-medium)" text-anchor="middle">Nov</text>
+                <text x="454" y="222" font-family="'Inter', sans-serif" font-size="9" fill="var(--green-subway)" font-weight="700" text-anchor="middle">Dic</text>
+
+                <!-- Áreas transparentes de Hover para facilitar interacción por columnas -->
+                <rect class="monthly-hover-trigger" x="40" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Enero', 'Inversión Subway: $542M COP (11.0%)<br>SOS Subway: 14.25%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="76" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Febrero', 'Inversión Subway: $591M COP (12.0%)<br>SOS Subway: 13.75%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="112" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Marzo', 'Inversión Subway: $591M COP (12.0%)<br>SOS Subway: 13.90%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="148" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Abril', 'Inversión Subway: $542M COP (11.0%)<br>SOS Subway: 14.00%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="184" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Mayo', 'Inversión Subway: $493M COP (10.0%)<br>SOS Subway: 12.75% (Valle de búsquedas)')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="220" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Junio', 'Inversión Subway: $444M COP (9.0%)<br>SOS Subway: 14.60%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="256" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Julio', 'Inversión Subway: $394M COP (8.0%)<br>SOS Subway: 14.75%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="292" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Agosto', 'Inversión Subway: $296M COP (6.0%)<br>SOS Subway: 15.40%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="328" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Septiembre', 'Inversión Subway: $296M COP (6.0%)<br>SOS Subway: 15.25%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="364" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Octubre', 'Inversión Subway: $246M COP (5.0%)<br>SOS Subway: 16.00%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="400" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Noviembre', 'Inversión Subway: $296M COP (6.0%)<br>SOS Subway: 16.00%')" onmouseleave="hideTooltip()" />
+                <rect class="monthly-hover-trigger" x="436" y="10" width="36" height="200" onmousemove="showTooltip(event, 'Diciembre (Pico)', 'Inversión Subway: <strong>$197M COP (4.0%)</strong><br>SOS Subway: <strong>16.40% (Pico del año)</strong><br><em>Desajuste: Se retira pauta en el mes de mayor venta.</em>')" onmouseleave="hideTooltip()" />
+              </svg>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ZONA INFERIOR: INSIGHT BOX -->
+        <div class="insight-box" style="margin-top: 10px;">
+          <strong>Descalce estacional crítico en Diciembre:</strong> Subway retira presupuesto cuando el consumidor tiene más dinero (primas navideñas), registrando su menor inversión del año ($197M COP, 4.0%) justo en el mes donde el Share of Search de la marca registra su pico más alto de demanda natural (16.40%).
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Fuente: Google Trends e Infoanálisis (Consolidado Histórico de Campañas).</span>
+        <span class="slide-counter-display">DIAPOSITIVA 4 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 5 — VARIABLES DEL MODELO MMM
+         ======================================================================= -->
+    <!-- ===== SLIDE 5: EL MODELO QUE EXPLICA EL KPI ===== -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">No es mala suerte. Es un modelo que predice por qué no crecemos.</div>
+          <div class="slide-subtitle">Variables explicativas del modelo de atribución y decaimiento publicitario (MMM)</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- GRID DE 3 COLUMNAS CON TARJETAS INTERACTIVAS -->
+        <div class="grid-3" style="flex-grow: 1;">
+          
+          <!-- Columna Izquierda: Medios Propios -->
+          <div class="model-column border-green">
+            <div class="model-column-title">Medios Propios</div>
+            
+            <div class="model-card">
+              <div class="model-card-title">📺 TV Tradicional</div>
+              <div>$497.2M COP pautados</div>
+              <div class="model-card-detail">Transformación con **adstock decay = 0.5**. Mide el efecto residual y de retención prolongada de la pauta en televisión nacional abierta y cable.</div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-card-title">💻 Digital</div>
+              <div>$23.4M COP invertidos</div>
+              <div class="model-card-detail">Transformación con **adstock decay = 0.3**. Retención de vida corta (conversión inmediata en search, social ads y programática móvil).</div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-card-title">📻 Radio & 🏙️ OOH</div>
+              <div>Gastos tácticos offline</div>
+              <div class="model-card-detail">Radio concentrada en horas pico de oficina. OOH estático a nivel local sin efectos acumulativos en el modelo base.</div>
+            </div>
+
+            <!-- Soporte de imagen externa con fallback -->
+            <div class="img-wrapper" style="height: 55px; margin-top: 5px;">
+              <img src="./assets/medios-propios.png" alt="Imagen Medios Propios" onerror="handleImageError(this, 'medios-propios.png')">
+            </div>
+
+          </div>
+
+          <!-- Columna Central: Variables del Entorno -->
+          <div class="model-column border-yellow">
+            <div class="model-column-title">Variables del Entorno</div>
+            
+            <div class="model-card">
+              <div class="model-card-title">📈 IPC Alimentos DANE</div>
+              <div>Inflación de alimentos</div>
+              <div class="model-card-detail">Inflación acumulada que presiona el ticket del sector. Interpolación lineal para transformar datos mensuales a escala semanal.</div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-card-title">😟 ICC Fedesarrollo</div>
+              <div>Confianza del consumidor</div>
+              <div class="model-card-detail">Mide la disposición del consumidor a realizar gastos de ocio o comida fuera del hogar ante la coyuntura de tasa de interés.</div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-card-title">🌴 Dummies Estacionales</div>
+              <div>Control de picos y valles</div>
+              <div class="model-card-detail">Variables binarias (0-1) para modelar Semana Santa, vacaciones escolares de julio y la distorsión festiva de diciembre.</div>
+            </div>
+            
+            <div style="font-size: 8.5px; color: var(--grey-medium); font-weight: 500; text-align: center; margin-top: 4px;">
+              *Nota: Interpolación lineal mensual → semanal
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Presión Competitiva -->
+          <div class="model-column border-grey">
+            <div class="model-column-title">Presión Competitiva</div>
+            
+            <div class="model-card">
+              <div class="model-card-title">🍔 SOS McDonald's</div>
+              <div>Líder de Share of Search</div>
+              <div class="model-card-detail">Presión del líder de categoría. Captura volumen mediante lanzamientos masivos y robusta presencia digital móvil.</div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-card-title">🍗 SOS KFC</div>
+              <div>Líder en SOI Tradicional</div>
+              <div class="model-card-detail">Saturación masiva de pauta en televisión abierta nacional, compitiendo directamente por el almuerzo diario.</div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-card-title">🍕 SOS Domino's</div>
+              <div>Foco en Delivery digital</div>
+              <div class="model-card-detail">Competencia directa en agregadores y app propia móvil con promociones agresivas (2x1).</div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-card-title">👑 SOS Burger King</div>
+              <div>Competencia directa en combos</div>
+              <div class="model-card-detail">Presión táctica concentrada en ofertas y cupones urbanos geolocalizados.</div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- FLECHA CONVERGIENTE DE TRES ENTRADAS A KPI CENTRAL -->
+        <div class="convergence-row">
+          <svg viewBox="0 0 100 20" width="80" height="20" style="overflow: visible;">
+            <path class="flow-arrow-path" d="M 10 10 L 85 10 M 75 5 L 85 10 L 75 15" fill="none" stroke="var(--green-subway)" stroke-width="3" stroke-linecap="round" />
+          </svg>
+          <div class="kpi-central-box">
+            KPI Objetivo: Share of Search Subway (66 semanas)
+          </div>
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Supuestos: Burger King imputado $0 digital · TV Nacional 58% sin ciudad explícita · Fuente: Infoanálisis / Admetricks / DANE / Fedesarrollo.</span>
+        <span class="slide-counter-display">DIAPOSITIVA 5 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 6 — ESPACIO RESERVADO RESULTADOS MODELO MMM
+         ======================================================================= -->
+    <!-- ===== SLIDE 6: ESPACIO RESERVADO MMM ===== -->
+    <div class="slide bg-grey" id="slide-6">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">El modelo habló. Aquí está lo que encontró.</div>
+          <div class="slide-subtitle">Resultados del Modelo de Regresión OLS — Pendiente de carga de imágenes</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- GRID DE PLACEHOLDERS CON IDS IDENTIFICABLES PARA EXTRACCIÓN Y REEMPLAZO -->
+        <div class="mmm-placeholders-grid">
+          
+          <!-- Contenedor 1: Waterfall -->
+          <div class="mmm-placeholder-card" id="mmm-chart-1">
+            <img src="./subway_mmm_waterfall.png" alt="Waterfall de Contribución al KPI" onerror="handleChartError(this, 'Waterfall de Contribución al KPI', 'waterfall')">
+          </div>
+
+          <!-- Contenedor 2: ROI por Medio -->
+          <div class="mmm-placeholder-card" id="mmm-chart-2">
+            <img src="./subway_mmm_roi_comparison.png" alt="ROI por Medio" onerror="handleChartError(this, 'ROI por Medio (Inversión vs Contribución)', 'roi')">
+          </div>
+
+          <!-- Contenedor 3: Matriz Eficiencia/Efectividad -->
+          <div class="mmm-placeholder-card" id="mmm-chart-3">
+            <img src="./subway_mmm_efficiency_matrix.png" alt="Matriz Eficiencia / Efectividad" onerror="handleChartError(this, 'Matriz Eficiencia / Efectividad (Scatter por Canal)', 'matrix')">
+          </div>
+
+          <!-- Contenedor 4: Fitted vs Real -->
+          <div class="mmm-placeholder-card" id="mmm-chart-4">
+            <img src="./subway_mmm_fitted_vs_real.png" alt="Serie Temporal: Fitted vs Real" onerror="handleChartError(this, 'Serie Temporal: Fitted vs Real', 'fitted')">
+          </div>
+
+          <!-- Contenedor 5: Mix Óptimo -->
+          <div class="mmm-placeholder-card" id="mmm-chart-5">
+            <img src="./subway_mmm_mix_optimal.png" alt="Mix Óptimo: Distribución Actual vs Recomendada" onerror="handleChartError(this, 'Mix Óptimo: Actual vs Recomendada (SciPy)', 'mix')">
+          </div>
+
+          <!-- Contenedor 6: KPI Proyectado con Mix Óptimo (Error esperado, activa fallback) -->
+          <div class="mmm-placeholder-card" id="mmm-chart-6">
+            <img src="./subway_mmm_projection.png" alt="KPI Proyectado con Mix Óptimo" onerror="handleChartError(this, 'KPI Proyectado con Mix Óptimo (+X% SOS)', 'projection')">
+          </div>
+
+        </div>
+
+        <!-- RECUADRO DE CONTROL -->
+        <div class="insight-box">
+          Esta sección será completada con los resultados del modelo OLS corrido en Python (statsmodels). Reemplazar cada placeholder con el gráfico correspondiente del archivo generate_charts.py. El modelo proyecta un incremento neto de <strong>190.6%</strong> en el Share of Search nacional optimizando el presupuesto.
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Nota: Gráficos de simulación y ajuste de mínimos cuadrados ordinarios (OLS) en series temporales.</span>
+        <span class="slide-counter-display">DIAPOSITIVA 6 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 7 — ARQUETIPOS Y MATRIZ DE PRIORIZACIÓN
+         ======================================================================= -->
+    <!-- ===== SLIDE 7: ARQUETIPOS Y PRIORIZACIÓN ===== -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">Cuatro personas. Una marca que no las conoce.</div>
+          <div class="slide-subtitle">Mapeo psicográfico de audiencias QSR y priorización de margen vs recurrencia</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <div class="grid-55-45">
+          
+          <!-- MITAD IZQUIERDA: GRID 2x2 DE TARJETAS DE ARQUETIPOS -->
+          <div class="grid-2x2">
+            
+            <!-- Fit-Consciente (TARGET PRIMARIO) -->
+            <div class="archetype-card target-primary slide-up-card sc-1">
+              <div class="archetype-header-row">
+                <div class="archetype-name">Fit-Consciente Urbano</div>
+                <span class="archetype-badge">Target Primario</span>
+              </div>
+              <div class="archetype-body-row">
+                <div class="archetype-img-frame">
+                  <img src="./assets/arquetipo-fit.png" alt="Fit-Consciente" onerror="handleImageError(this, 'arquetipo-fit.png')">
+                </div>
+                <div class="archetype-audience count-up" data-target="1.8" data-suffix="M">1.8M <span>Audiencia</span></div>
+              </div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Gen Z/Millennial · NSE 4-6 · Bogotá/Medellín<br>
+                <strong>Motivación:</strong> Control de calorías, frescura e ingredientes a la vista.<br>
+                <strong>Barrera:</strong> Fricción en app móvil (carga lenta de 4.8s).
+              </div>
+            </div>
+
+            <!-- Oficinista Presionado -->
+            <div class="archetype-card slide-up-card sc-2">
+              <div class="archetype-header-row">
+                <div class="archetype-name" style="color: #2563EB;">Oficinista Presionado</div>
+              </div>
+              <div class="archetype-body-row">
+                <div class="archetype-img-frame">
+                  <img src="./assets/arquetipo-oficinista.png" alt="Oficinista" onerror="handleImageError(this, 'arquetipo-oficinista.png')">
+                </div>
+                <div class="archetype-audience count-up" data-target="3.1" data-suffix="M">3.1M <span>Audiencia</span></div>
+              </div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Millennial/Gen X · NSE 3-5 · Zonas Financieras<br>
+                <strong>Motivación:</strong> Almuerzo rápido, nutritivo, con entrega express.<br>
+                <strong>Barrera:</strong> Proceso de pago lento en agregadores y filas en local.
+              </div>
+            </div>
+
+            <!-- Cazador de Promos -->
+            <div class="archetype-card slide-up-card sc-3">
+              <div class="archetype-header-row">
+                <div class="archetype-name" style="color: #FFC423;">Cazador de Promos</div>
+              </div>
+              <div class="archetype-body-row">
+                <div class="archetype-img-frame">
+                  <img src="./assets/arquetipo-cazador.png" alt="Cazador" onerror="handleImageError(this, 'arquetipo-cazador.png')">
+                </div>
+                <div class="archetype-audience count-up" data-target="4.2" data-suffix="M">4.2M <span>Audiencia</span></div>
+              </div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Centennials / Universitarios · NSE 2-3 · Cali/Inter.<br>
+                <strong>Motivación:</strong> Precio bajo, saciedad (Footlong), cupones.<br>
+                <strong>Barrera:</strong> Costo del domicilio, alzas del "Sub del Día".
+              </div>
+            </div>
+
+            <!-- Comprador de Centro Comercial -->
+            <div class="archetype-card slide-up-card sc-4">
+              <div class="archetype-header-row">
+                <div class="archetype-name" style="color: #F97316;">Comprador de CC</div>
+              </div>
+              <div class="archetype-body-row">
+                <div class="archetype-img-frame">
+                  <img src="./assets/arquetipo-cc.png" alt="Comprador CC" onerror="handleImageError(this, 'arquetipo-cc.png')">
+                </div>
+                <div class="archetype-audience count-up" data-target="2.3" data-suffix="M">2.3M <span>Audiencia</span></div>
+              </div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Familias / Padres de Familia · NSE 3-5 · Nacional<br>
+                <strong>Motivación:</strong> Conveniencia el fin de semana, combos grupales.<br>
+                <strong>Barrera:</strong> Carta infantil confusa y falta de juguetes decorativos.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- MITAD DERECHA: SCATTER PLOT SVG INTERACTIVO -->
+          <div class="chart-container">
+            <div class="chart-title">Matriz de Priorización de Segmentos</div>
+            <div class="chart-canvas-wrapper" style="display: flex; justify-content: center; align-items: center;">
+              <svg viewBox="0 0 350 280" width="100%" height="100%" style="overflow: visible;">
+                <!-- Cuadrantes (x=5 -> 180px, y=5 -> 130px) -->
+                <line class="scatter-grid-line" x1="30" y1="130" x2="330" y2="130" />
+                <line class="scatter-grid-line" x1="180" y1="20" x2="180" y2="240" />
+
+                <!-- Ejes -->
+                <line class="scatter-axis" x1="30" y1="20" x2="30" y2="240" />
+                <line class="scatter-axis" x1="30" y1="240" x2="330" y2="240" />
+
+                <!-- Leyendas de Ejes -->
+                <text x="180" y="262" font-family="'Inter', sans-serif" font-size="9.5" fill="var(--grey-medium)" text-anchor="middle" font-weight="700">Disposición a Pagar (Ticket Promedio)</text>
+                <text x="12" y="130" font-family="'Inter', sans-serif" font-size="9.5" fill="var(--grey-medium)" text-anchor="middle" font-weight="700" transform="rotate(-90 12 130)">Frecuencia de Compra</text>
+
+                <!-- Cuadrante Estrella Label -->
+                <rect x="236" y="26" width="90" height="18" fill="var(--green-soft)" rx="4" />
+                <text x="281" y="38" font-family="'Inter', sans-serif" font-size="8.5" fill="var(--green-dark)" font-weight="900" text-anchor="middle">⚡ CUADRANTE ESTRELLA</text>
+
+                <!-- Puntos Graficados (Con animación CSS scale) -->
+                <!-- 1. Fit-Consciente (8.5, 7.0) -> X: 30 + 8.5*30 = 285, Y: 240 - 7.0*22 = 86 -->
+                <g class="scatter-point sp-1" onmousemove="showTooltip(event, 'Fit-Consciente Urbano (Target Primario)', 'Disposición a pagar: 8.5/10<br>Frecuencia de visita: 7.0/10<br>Audiencia potencial: 1.8 millones<br>Rentabilidad: **Muy Alta (Ticket Completo)**')" onmouseleave="hideTooltip()">
+                  <circle cx="285" cy="86" r="9" fill="var(--green-subway)" stroke="var(--white)" stroke-width="2" />
+                  <text x="285" y="103" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="var(--green-dark)" text-anchor="middle">Fit-Consciente</text>
+                </g>
+
+                <!-- 2. Oficinista (6.0, 8.0) -> X: 30 + 6.0*30 = 210, Y: 240 - 8.0*22 = 64 -->
+                <g class="scatter-point sp-2" onmousemove="showTooltip(event, 'Oficinista Presionado', 'Disposición a pagar: 6.0/10<br>Frecuencia de visita: 8.0/10<br>Audiencia potencial: 3.1 millones<br>Rentabilidad: **Alta (Almuerzos Semanales)**')" onmouseleave="hideTooltip()">
+                  <polygon points="210,54 220,71 200,71" fill="#2563EB" stroke="var(--white)" stroke-width="2" />
+                  <text x="210" y="80" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#2563EB" text-anchor="middle">Oficinista</text>
+                </g>
+
+                <!-- 3. Cazador de Promos (3.0, 8.5) -> X: 30 + 3.0*30 = 120, Y: 240 - 8.5*22 = 53 -->
+                <g class="scatter-point sp-3" onmousemove="showTooltip(event, 'Cazador de Promos', 'Disposición a pagar: 3.0/10<br>Frecuencia de visita: 8.5/10<br>Audiencia potencial: 4.2 millones<br>Rentabilidad: **Baja (Sensible a ofertas)**')" onmouseleave="hideTooltip()">
+                  <rect x="111" y="44" width="16" height="16" fill="var(--yellow-subway)" stroke="var(--white)" stroke-width="2" />
+                  <text x="120" y="71" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#8A6D00" text-anchor="middle">Cazador Promos</text>
+                </g>
+
+                <!-- 4. Comprador CC (7.5, 4.0) -> X: 30 + 7.5*30 = 255, Y: 240 - 4.0*22 = 152 -->
+                <g class="scatter-point sp-4" onmousemove="showTooltip(event, 'Comprador CC', 'Disposición a pagar: 7.5/10<br>Frecuencia de visita: 4.0/10<br>Audiencia potencial: 2.3 millones<br>Rentabilidad: **Media (Tráfico familiar fines de semana)**')" onmouseleave="hideTooltip()">
+                  <polygon points="255,142 265,152 255,162 245,152" fill="#F97316" stroke="var(--white)" stroke-width="2" />
+                  <text x="255" y="172" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#F97316" text-anchor="middle">Comprador CC</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Fuente: Meta Audience Insights + Google Trends + Social Listening Colombia (Q1 2026).</span>
+        <span class="slide-counter-display">DIAPOSITIVA 7 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 8 — UX DIGITAL + BENCHMARK LATAM
+         ======================================================================= -->
+    <!-- ===== SLIDE 8: LLEGAN AL SITIO. NO PUEDEN COMPRAR. ===== -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">Llegan al sitio. No pueden comprar.</div>
+          <div class="slide-subtitle">Auditoría de performance UX móvil y benchmark táctico en mercados maduros de LatAm</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <div class="grid-2" style="flex-grow: 1;">
+          
+          <!-- COLUMNA IZQUIERDA: BARRERAS UX -->
+          <div class="chart-container">
+            <div class="chart-title">El punto de conversión digital está roto</div>
+            <div style="display: flex; flex-direction: column; justify-content: space-around; height: 100%;">
+              
+              <!-- Barrera 1 -->
+              <div class="barrier-card slide-up-card sc-1">
+                <div class="barrier-number">45%</div>
+                <div class="barrier-content">
+                  <div class="barrier-title">LCP de 4.8s móvil (Score Core Web Vitals: 34/100)</div>
+                  <div class="barrier-arquetipo">Arquetipo afectado: <strong>Fit-Consciente Urbano</strong> (Abandono por rebote)</div>
+                  <div class="barrier-solution">Solución: Compresión de imágenes a WebP y CDN localizable para acelerar la carga móvil.</div>
+                </div>
+              </div>
+
+              <!-- Barrera 2 -->
+              <div class="barrier-card slide-up-card sc-2">
+                <div class="barrier-number">35%</div>
+                <div class="barrier-content">
+                  <div class="barrier-title">Checkout complejo de 12+ pasos y registro obligatorio</div>
+                  <div class="barrier-arquetipo">Arquetipo afectado: <strong>Oficinista Presionado</strong> (Fatiga en pasarela)</div>
+                  <div class="barrier-solution">Solución: Guest Checkout integrado y vinculación de express payments (Apple Pay / Google Pay).</div>
+                </div>
+              </div>
+
+              <!-- Barrera 3 -->
+              <div class="barrier-card slide-up-card sc-3">
+                <div class="barrier-number">12%</div>
+                <div class="barrier-content">
+                  <div class="barrier-title">Fallo pasarela Wompi/PSE en dispositivos móviles</div>
+                  <div class="barrier-arquetipo">Arquetipo afectado: <strong>Comprador de CC</strong> (Desconfianza de seguridad)</div>
+                  <div class="barrier-solution">Solución: Reintentos en segundo plano e integración de opción de Pago contra entrega física.</div>
+                </div>
+              </div>
+
+              <!-- Barrera 4 -->
+              <div class="barrier-card slide-up-card sc-4">
+                <div class="barrier-number">10%</div>
+                <div class="barrier-content">
+                  <div class="barrier-title">Sin geolocalización al inicio (Cálculo tardío de cobertura)</div>
+                  <div class="barrier-arquetipo">Arquetipo afectado: <strong>Fit-Consciente Urbano</strong> (Frustración por stock)</div>
+                  <div class="barrier-solution">Solución: Bloqueo de código postal y cálculo de inventario local en la Home inicial.</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: BENCHMARK LATAM -->
+          <div class="chart-container">
+            <div class="chart-title">Cuando Subway activa digital, el KPI reacciona</div>
+            <div style="display: flex; flex-direction: column; justify-content: space-around; height: 100%;">
+              
+              <!-- México -->
+              <div class="benchmark-block slide-up-card sc-1">
+                <div class="benchmark-header">
+                  <div class="benchmark-country">🇲🇽 México · Subway Series</div>
+                  <div class="benchmark-bar-group">
+                    <span class="benchmark-bar-label">DIGITAL: 55%</span>
+                    <svg width="60" height="6"><rect width="60" height="6" rx="3" fill="#E0E0E0"/><rect width="33" height="6" rx="3" fill="var(--green-subway)"/></svg>
+                  </div>
+                </div>
+                <div class="benchmark-details">
+                  Lanzamiento digital apoyado en creadores de Twitch. Incrementó **+18%** las ventas de su app y rejuveneció la recordación de marca de combos fijos.
+                </div>
+                <div class="benchmark-learning">Aprendizaje: El contenido de creadores acelera el KPI orgánico.</div>
+                <!-- Soporte de imagen externa con fallback -->
+                <div class="img-wrapper" style="height: 35px; display: none;">
+                  <img src="./assets/benchmark-mexico.png" alt="Camp. Mexico" onerror="handleImageError(this, 'benchmark-mexico.png')">
+                </div>
+              </div>
+
+              <!-- Brasil -->
+              <div class="benchmark-block slide-up-card sc-2">
+                <div class="benchmark-header">
+                  <div class="benchmark-country">🇧🇷 Brasil · NBA & App Gamificación</div>
+                  <div class="benchmark-bar-group">
+                    <span class="benchmark-bar-label">DIGITAL: 60%</span>
+                    <svg width="60" height="6"><rect width="60" height="6" rx="3" fill="#E0E0E0"/><rect width="36" height="6" rx="3" fill="var(--green-subway)"/></svg>
+                  </div>
+                </div>
+                <div class="benchmark-details">
+                  Asociación con la NBA. Cuponera móvil gamificada y promos 2x1 los días de partido; resultó en un aumento de **+45% en descargas de app**.
+                </div>
+                <div class="benchmark-learning">Aprendizaje: La gamificación + deporte convierte al Cazador de Promos.</div>
+                <div class="img-wrapper" style="height: 35px; display: none;">
+                  <img src="./assets/benchmark-brasil.png" alt="Camp. Brasil" onerror="handleImageError(this, 'benchmark-brasil.png')">
+                </div>
+              </div>
+
+              <!-- Perú -->
+              <div class="benchmark-block slide-up-card sc-3">
+                <div class="benchmark-header">
+                  <div class="benchmark-country">🇵🇪 Perú · Geofencing Táctico</div>
+                  <div class="benchmark-bar-group">
+                    <span class="benchmark-bar-label">DIGITAL: 40%</span>
+                    <svg width="60" height="6"><rect width="60" height="6" rx="3" fill="#E0E0E0"/><rect width="24" height="6" rx="3" fill="var(--green-subway)"/></svg>
+                  </div>
+                </div>
+                <div class="benchmark-details">
+                  Pauta hiperlocalizada en distritos financieros. Geolocalización en Waze para capturar compras por impulso del menú ejecutivo semanal.
+                </div>
+                <div class="benchmark-learning">Aprendizaje: El geofencing captura al Oficinista en el momento de decisión.</div>
+                <div class="img-wrapper" style="height: 35px; display: none;">
+                  <img src="./assets/benchmark-peru.png" alt="Camp. Peru" onerror="handleImageError(this, 'benchmark-peru.png')">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Fuentes: Auditoría Google PageSpeed Insights & Reporte de Campañas Regionales Subway LatAm (2025).</span>
+        <span class="slide-counter-display">DIAPOSITIVA 8 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 9 — TESTIMONIOS (VALIDACIÓN CUALITATIVA)
+         ======================================================================= -->
+    <!-- ===== SLIDE 9: LO QUE ELLOS NO TE DIRÍAN EN UNA ENCUESTA ===== -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">Lo que ellos no te dirían en una encuesta. Pero sí en una cola.</div>
+          <div class="slide-subtitle">Validación cualitativa: Testimonios de arquetipos construidos a través de social listening y entrevistas</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- GRID DE 4 TARJETAS TESTIMONIALES -->
+        <div class="grid-4" style="flex-grow: 1; padding: 5px 0;">
+          
+          <!-- Testimonio 1: Fit-Consciente -->
+          <div class="testimonial-card slide-up-card sc-1">
+            <span class="testimonial-badge badge-fit">Fit-Consciente</span>
+            <div class="testimonial-user">
+              <div class="testimonial-avatar">
+                <!-- Avatar SVG Busto Femenino -->
+                <svg viewBox="0 0 40 40" width="34" height="34"><circle cx="20" cy="20" r="20" fill="var(--green-soft)"/><path d="M10,34 C10,27 15,25 20,25 C25,25 30,27 30,34 M20,21 C23,21 25,18 25,15 C25,12 23,10 20,10 C17,10 15,12 15,15 C15,18 17,21 20,21 Z" fill="none" stroke="var(--green-subway)" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="testimonial-meta">
+                <span class="testimonial-name">Valentina, 28</span>
+                <span class="testimonial-city">Bogotá (Chicó)</span>
+              </div>
+            </div>
+            <div class="testimonial-quote">
+              "Me encanta que puedo armar mi propio sánduche porque controlo las calorías, pero la app se traba cada vez que quiero pedir desde la oficina. Termino yendo a otro sitio."
+            </div>
+          </div>
+
+          <!-- Testimonio 2: Oficinista -->
+          <div class="testimonial-card slide-up-card sc-2">
+            <span class="testimonial-badge badge-ofi">Oficinista</span>
+            <div class="testimonial-user">
+              <div class="testimonial-avatar">
+                <!-- Avatar SVG Busto Masculino -->
+                <svg viewBox="0 0 40 40" width="34" height="34"><circle cx="20" cy="20" r="20" fill="#E8F0FE"/><path d="M10,34 C10,28 15,26 20,26 C25,26 30,28 30,34 M20,22 C23.3,22 26,19.3 26,16 C26,12.7 23.3,10 20,10 C16.7,10 14,12.7 14,16 C14,19.3 16.7,22 20,22 Z" fill="none" stroke="#1A73E8" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="testimonial-meta">
+                <span class="testimonial-name">Andrés, 35</span>
+                <span class="testimonial-city">Medellín (El Poblado)</span>
+              </div>
+            </div>
+            <div class="testimonial-quote">
+              "Necesito almorzar algo rápido al mediodía. Si el proceso de pago en la web demora más de 2 minutos o me obliga a registrarme con contraseña, cancelo y pido un Crepes por Rappi."
+            </div>
+          </div>
+
+          <!-- Testimonio 3: Cazador de Promos -->
+          <div class="testimonial-card slide-up-card sc-3">
+            <span class="testimonial-badge badge-caz">Cazador Promos</span>
+            <div class="testimonial-user">
+              <div class="testimonial-avatar">
+                <!-- Avatar SVG Busto Joven -->
+                <svg viewBox="0 0 40 40" width="34" height="34"><circle cx="20" cy="20" r="20" fill="var(--yellow-soft)"/><path d="M10,34 C10,28 15,26 20,26 C25,26 30,28 30,34 M20,21 C22.8,21 25,18.8 25,16 C25,13.2 22.8,11 20,11 C17.2,11 15,13.2 15,16 C15,18.8 17.2,21 20,21 Z" fill="none" stroke="#8A6D00" stroke-width="2" stroke-linecap="round"/><path d="M12,12 C14,8 26,8 28,12" fill="none" stroke="#8A6D00" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="testimonial-meta">
+                <span class="testimonial-name">Santiago, 22</span>
+                <span class="testimonial-city">Cali (Universitario)</span>
+              </div>
+            </div>
+            <div class="testimonial-quote">
+              "Cuando hay la promoción del Sub del Día sí voy, me parece bacano. Pero si sube de precio ya no vale la pena contra un corrientazo ejecutivo que trae sopa y bebida."
+            </div>
+          </div>
+
+          <!-- Testimonio 4: Comprador CC -->
+          <div class="testimonial-card slide-up-card sc-4">
+            <span class="testimonial-badge badge-fam">Comprador CC</span>
+            <div class="testimonial-user">
+              <div class="testimonial-avatar">
+                <!-- Avatar SVG Busto Adulto -->
+                <svg viewBox="0 0 40 40" width="34" height="34"><circle cx="20" cy="20" r="20" fill="#FEEAD3"/><path d="M10,34 C10,27 15,25 20,25 C25,25 30,27 30,34 M20,22 C23,22 25,19 25,16 C25,13 23,11 20,11 C17,11 15,13 15,16 C15,19 17,22 20,22 Z" fill="none" stroke="#E67C00" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="testimonial-meta">
+                <span class="testimonial-name">Mónica, 40</span>
+                <span class="testimonial-city">Barranquilla (CC Viva)</span>
+              </div>
+            </div>
+            <div class="testimonial-quote">
+              "Ir con los niños al centro comercial y pedir en Subway es enredado porque no hay un combo claro para ellos. Terminamos yendo a McDonald's que tiene su cajita feliz directa."
+            </div>
+          </div>
+
+        </div>
+
+        <!-- NOTA METODOLÓGICA -->
+        <div class="methodology-strip">
+          <strong>Validación Metodológica Cualitativa:</strong> Testimonios ficticios construidos mediante análisis de Social Listening (quejas y fricciones en Rappi/Twitter/TikTok) y arquetipos validados cuantitativamente. n mínimo sugerido para validación en campo: **80 encuestados** · Perfil: Consumidores activos QSR Colombia, 18-45 años · Canal de Captura: Google Forms / SurveyMonkey.
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Metodología de Validación Primaria (Propuesta Académica de Investigación de Mercados).</span>
+        <span class="slide-counter-display">DIAPOSITIVA 9 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 10 — TABLA DE ESTRATEGIA DE COMUNICACIÓN
+         ======================================================================= -->
+    <!-- ===== SLIDE 10: DE LOS DATOS A LA PAUTA ===== -->
+    <div class="slide" id="slide-10">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">De los datos a la pauta. Sin adivinar.</div>
+          <div class="slide-subtitle">Plan táctico de medios, formato y copies creativos optimizado por segmento de valor</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- CONTENEDOR DE LA TABLA COMPLETA -->
+        <div class="table-container">
+          <table class="strategy-table">
+            <thead>
+              <tr>
+                <th style="width: 14%;">Arquetipo</th>
+                <th style="width: 15%;">Producto Ancla</th>
+                <th style="width: 15%;">Vehículo de Medios</th>
+                <th style="width: 13%;">Formato Táctico</th>
+                <th style="width: 21%;">Mensaje Creativo Clave</th>
+                <th style="width: 11%;">CTA + KPI</th>
+                <th style="width: 11%;">Geografía</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <!-- Fit-Consciente (Fila Destacada) -->
+              <tr class="row-target">
+                <td><strong>Fit-Consciente<br>(TARGET PRIMARIO)</strong></td>
+                <td>Subway Series Chef (Recetas armadas premium)</td>
+                <td>Instagram Reels + YouTube 15s (Programática)</td>
+                <td>Reels 15s ingredientes frescos + conteo calorías</td>
+                <td>**Funcional-emocional:** *"Sabés exactamente lo que comés."* Foco en transparencia y frescura.</td>
+                <td>**"Ver menú"**<br>Landing nutricional<br>CPV < $150 COP</td>
+                <td>Bogotá (Chicó, Chapinero) · Med. (Poblado, Laureles)</td>
+              </tr>
+
+              <!-- Oficinista Presionado -->
+              <tr>
+                <td><strong>Oficinista Presionado</strong></td>
+                <td>Subway Series velocidad (Prearmado y retiro rápido)</td>
+                <td>Waze Ads + Google Search (11:30 AM – 1:30 PM)</td>
+                <td>Notificación 6s Bumper + Search táctico</td>
+                <td>**Funcional:** *"Almuerzo listo en 5 minutos."* Rapidez, cercanía y cero fila en canal de compra.</td>
+                <td>**"Pedir ahora"**<br>Pedido express preconf.<br>CTR > 8% en search</td>
+                <td>Zonas financieras y empresariales (500m radio)</td>
+              </tr>
+
+              <!-- Cazador de Promos -->
+              <tr>
+                <td><strong>Cazador de Promos</strong></td>
+                <td>Sub del Día (Ancla de volumen y enganche)</td>
+                <td>Facebook Feed + Historias + WhatsApp Blast</td>
+                <td>Carrusel dinámico con precio visible frame 1</td>
+                <td>**Promocional:** Foco en valor y economía del día. *"El de siempre, al precio de hoy."*</td>
+                <td>**Cupón descargable**<br>Conversión a app<br>CPC < $200 COP</td>
+                <td>Ciudades intermedias (Captación cobertura)</td>
+              </tr>
+
+              <!-- Comprador CC -->
+              <tr>
+                <td><strong>Comprador de CC</strong></td>
+                <td>Combo Pareja / Familiar $38.900 (Ticket alto)</td>
+                <td>Mupis Digitales (OOH) CC + IG Stories fin de semana</td>
+                <td>Video 6s bumper + Stories contextualizados</td>
+                <td>**Emocional:** *"El almuerzo de todos en un solo combo."* Compartir en familia en el mall.</td>
+                <td>**"Encuentra tu Subway"**<br>Redirección a mapa<br>Ticket promedio ↑</td>
+                <td>Centros comerciales con Subway presente</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Plan de Medios recomendado bajo los lineamientos y estándares de agencias senior (Initiative / Mediabrands).</span>
+        <span class="slide-counter-display">DIAPOSITIVA 10 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 11 — FORMATOS PUBLICITARIOS POR CLUSTER
+         ======================================================================= -->
+    <!-- ===== SLIDE 11: EL MENSAJE CORRECTO. EN EL FORMATO CORRECTO. ===== -->
+    <div class="slide" id="slide-11">
+      <div class="slide-header">
+        <div class="subway-logo">
+          <span class="logo-asterisk">*</span><span class="logo-sub">SUB</span><span class="logo-way">WAY</span>
+        </div>
+        <div class="slide-title-wrapper">
+          <div class="slide-hook">El mensaje correcto. En el formato correcto. Para la persona correcta.</div>
+          <div class="slide-subtitle">Tipos de producción publicitaria recomendados según arquetipo</div>
+        </div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- 4 COLUMNAS VERTICALES, UNA POR ARQUETIPO -->
+        <div class="grid-4" style="flex-grow: 1;">
+          
+          <!-- Column 1: Fit-Consciente (Green) -->
+          <div class="format-column col-fit format-column-box fc-1">
+            <div class="format-column-header">
+              <span class="format-column-title" style="color: var(--green-subway);">Fit-Consciente</span>
+              <span class="archetype-badge" style="background-color: var(--green-subway); color: #fff;">Chef</span>
+            </div>
+            
+            <!-- Format Card 1 -->
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <!-- Video Icon -->
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">IG & TikTok Reels</span>
+                <span class="format-spec">Vertical (9:16) · 15s</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Requiere UGC / creadores de estilo de vida, sin audio obligatorio, subtitulado dinámico.</div>
+
+            <!-- Format Card 2 -->
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">YouTube Non-skippable</span>
+                <span class="format-spec">Horizontal (16:9) · 15s</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Adaptable desde asset de TV Nacional con retoque de transiciones.</div>
+
+            <!-- Soporte de imagen externa con fallback -->
+            <div class="img-wrapper" style="height: 42px; margin-top: 5px;">
+              <img src="./assets/formato-reels.png" alt="Formato Reels" onerror="handleImageError(this, 'formato-reels.png')">
+            </div>
+          </div>
+
+          <!-- Column 2: Oficinista (Blue) -->
+          <div class="format-column col-ofi format-column-box fc-2">
+            <div class="format-column-header">
+              <span class="format-column-title" style="color: #2563EB;">Oficinista</span>
+              <span class="archetype-badge" style="background-color: #2563EB; color: #fff;">Speed</span>
+            </div>
+            
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <!-- Search Icon -->
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">Google Search Ads</span>
+                <span class="format-spec">Texto dinámico · CPC</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Requiere copies directos de velocidad, sin activos de video.</div>
+
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <!-- Pin Icon -->
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">Waze Pins & Takeover</span>
+                <span class="format-spec">Banner estático contextual</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Banners de un solo frame, legibles a velocidad de conducción de 30 km/h.</div>
+            
+            <div class="img-wrapper" style="height: 42px; margin-top: 5px;">
+              <img src="./assets/formato-waze.png" alt="Formato Waze" onerror="handleImageError(this, 'formato-waze.png')">
+            </div>
+          </div>
+
+          <!-- Column 3: Cazador de Promos (Yellow) -->
+          <div class="format-column col-caz format-column-box fc-3">
+            <div class="format-column-header">
+              <span class="format-column-title" style="color: #8A6D00;">Cazador Promos</span>
+              <span class="archetype-badge" style="background-color: var(--yellow-subway); color: var(--black);">Promo</span>
+            </div>
+            
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <!-- Carousel Icon -->
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">Meta Carousel Ads</span>
+                <span class="format-spec">Square (1:1) · Catálogo</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Foco en precio visible, assets de catálogo digital con fondo blanco.</div>
+
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <!-- Message Icon -->
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">WhatsApp Interactive</span>
+                <span class="format-spec">Plantilla push · Link directo</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Foco en cupones dinámicos de un solo toque y CTA directo a agregadores.</div>
+
+            <div class="img-wrapper" style="height: 42px; margin-top: 5px;">
+              <img src="./assets/formato-carousel.png" alt="Formato Carousel" onerror="handleImageError(this, 'formato-carousel.png')">
+            </div>
+          </div>
+
+          <!-- Column 4: Comprador CC (Orange) -->
+          <div class="format-column col-fam format-column-box fc-4">
+            <div class="format-column-header">
+              <span class="format-column-title" style="color: #F97316;">Comprador CC</span>
+              <span class="archetype-badge" style="background-color: #F97316; color: #fff;">Family</span>
+            </div>
+            
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <!-- OOH Screen Icon -->
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">DOOH Screens (CC)</span>
+                <span class="format-spec">Pantalla digital · Loop 10s</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Producción de alta resolución, sin audio, foco en legibilidad a 15 metros.</div>
+
+            <div class="format-card">
+              <div class="format-icon-frame">
+                <svg class="format-icon-svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+              </div>
+              <div class="format-info">
+                <span class="format-name">IG & FB Stories</span>
+                <span class="format-spec">Vertical (9:16) · 6s Bumper</span>
+              </div>
+            </div>
+            <div class="format-prod-note">Adaptable de TV, recortado para resaltar el combo familiar en el primer segundo.</div>
+
+            <div class="img-wrapper" style="height: 42px; margin-top: 5px;">
+              <img src="./assets/formato-stories.png" alt="Formato Stories" onerror="handleImageError(this, 'formato-stories.png')">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RECUADRO DE EFICIENCIA DE FORMATO -->
+        <div class="format-strip">
+          La eficiencia no es solo de medio. Es de formato. Un Reel de 15s para el Fit-Consciente no se puede reutilizar como bumper para el Oficinista sin pérdida de relevancia.
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Guía de Especificaciones Creativas y Producción Táctica de Campañas.</span>
+        <span class="slide-counter-display">DIAPOSITIVA 11 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 12 — CIERRE (Fondo Negro)
+         ======================================================================= -->
+    <!-- ===== SLIDE 12: CIERRE ===== -->
+    <div class="slide bg-black" id="slide-12">
+      <div></div>
+      <div class="cierre-content">
+        <div class="cierre-title cierre-seq cs-1">Subway no necesita más presupuesto.</div>
+        <div class="cierre-highlight cierre-seq cs-2">Necesita redistribuirlo.</div>
+        <div class="cierre-text cierre-seq cs-3">
+          Con el mismo dinero que hoy se invierte en televisión nacional ineficiente, Subway puede capturar al consumidor urbano de alto valor en el momento exacto de decisión, eliminar la fricción digital, y superar el 12% de SOS en los tres mercados que concentran el 70% del valor de la categoría.
+        </div>
+        <div class="cierre-divider cierre-seq cs-4"></div>
+      </div>
+      <div class="slide-footer dark-footer">
+        <span>Ailyn Gómez · Naomi Mosquera · MMM Subway Colombia · Universidad Externado de Colombia · 2026</span>
+        <span>Fuentes: Euromonitor / DANE / Fedesarrollo / Google Trends / Infoanálisis / Admetricks / Meta Audience Insights</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTROLES Y PANTALLA COMPLETA OVERLAY -->
+  <div class="controls-overlay">
+    <button class="control-btn" id="prev-btn" title="Anterior (←)">←</button>
+    <button class="control-btn" id="next-btn" title="Siguiente (→)">→</button>
+    <button class="control-btn" id="fullscreen-btn" title="Pantalla Completa">[ ]</button>
+  </div>
+
+  <!-- JAVASCRIPT DE NAVEGACIÓN Y ESCALADO (16:9) -->
+  <script>
+    /* =========================================================================
+       1. SISTEMA DE NAVEGACIÓN ENTRE DIAPOSITIVAS
+       ========================================================================= */
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    // Generar Barra de Progreso Inferior Dinámicamente
+    const progressBar = document.getElementById('progress-bar');
+    for (let i = 1; i <= totalSlides; i++) {
+      const segment = document.createElement('div');
+      segment.classList.add('progress-segment');
+      if (i === 1) segment.classList.add('current');
+      segment.id = `progress-seg-${i}`;
+      
+      // Permitir hacer click en la barra de progreso directamente para navegar
+      segment.addEventListener('click', () => goToSlide(i));
+      progressBar.appendChild(segment);
+    }
+
+    // Cambiar de Diapositiva
+    function goToSlide(n) {
+      if (n < 1 || n > totalSlides) return;
+      
+      // Desactivar diapositiva anterior
+      const activeSlide = document.querySelector('.slide.active');
+      if (activeSlide) activeSlide.classList.remove('active');
+      
+      // Activar nueva diapositiva
+      slides[n - 1].classList.add('active');
+
+      // Actualizar Barra de Progreso
+      for (let i = 1; i <= totalSlides; i++) {
+        const seg = document.getElementById(`progress-seg-${i}`);
+        seg.className = 'progress-segment'; // Reset
+        if (i < n) {
+          seg.classList.add('active');
+        } else if (i === n) {
+          seg.classList.add('current');
+        }
+      }
+
+      currentSlide = n;
+      
+      // Actualizar Contadores Textuales
+      slides[n - 1].querySelectorAll('.slide-counter-display').forEach(el => {
+        el.textContent = `DIAPOSITIVA ${n} / ${totalSlides}`;
+      });
+
+      // Disparar y reiniciar animaciones/métricas en la diapositiva activa
+      triggerSlideAnimations(n);
+    }
+
+    // Botones de Navegación Lateral
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      goToSlide(currentSlide - 1);
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      goToSlide(currentSlide + 1);
+    });
+
+    // Teclado (Flechas ←, →, Barra Espaciadora y Retroceso)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        goToSlide(currentSlide - 1);
+      } else if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault(); // Evita scroll de barra espaciadora
+        goToSlide(currentSlide + 1);
+      }
+    });
+
+    // Soporte para gestos táctiles (Swipe en celulares/tablets)
+    let touchstartX = 0;
+    let touchendX = 0;
+    
+    document.addEventListener('touchstart', e => {
+      touchstartX = e.changedTouches[0].screenX;
+    }, false);
+    
+    document.addEventListener('touchend', e => {
+      touchendX = e.changedTouches[0].screenX;
+      if (touchendX < touchstartX - 50) {
+        goToSlide(currentSlide + 1); // Swipe izquierdo -> siguiente
+      }
+      if (touchendX > touchstartX + 50) {
+        goToSlide(currentSlide - 1); // Swipe derecho -> anterior
+      }
+    }, false);
+
+    /* =========================================================================
+       2. LÓGICA DE CONTROL PANTALLA COMPLETA
+       ========================================================================= */
+    const container = document.querySelector('.presentation-container');
+    const fsButton = document.getElementById('fullscreen-btn');
+    
+    fsButton.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(err => {
+          console.error(`Error al intentar pantalla completa: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Cambiar icono de botón de pantalla completa según el estado real del navegador
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        fsButton.textContent = ' ⛶ ';
+      } else {
+        fsButton.textContent = '[ ]';
+      }
+      // Ajustar escala en cambio de estado
+      setTimeout(scalePresentation, 100);
+    });
+
+    /* =========================================================================
+       3. ESCALADO RESPONSIVO DE CONTENEDOR 16:9
+       ========================================================================= */
+    function scalePresentation() {
+      const targetWidth = 1280;
+      const targetHeight = 720;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      // Calcular factor de escala para ajustar perfectamente al viewport
+      const scaleX = windowWidth / targetWidth;
+      const scaleY = windowHeight / targetHeight;
+      const scale = Math.min(scaleX, scaleY);
+
+      container.style.transform = `scale(${scale})`;
+      
+      // Posicionar en el centro de la pantalla
+      container.style.position = 'absolute';
+      container.style.left = `${(windowWidth - targetWidth * scale) / 2}px`;
+      container.style.top = `${(windowHeight - targetHeight * scale) / 2}px`;
+    }
+
+    window.addEventListener('resize', scalePresentation);
+    window.addEventListener('load', scalePresentation);
+    scalePresentation();
+
+    /* =========================================================================
+       4. ANIMACIONES DINÁMICAS AL CAMBIAR DIAPOSITIVA
+       ========================================================================= */
+    function triggerSlideAnimations(slideNum) {
+      const activeSlide = slides[slideNum - 1];
+
+      // Métricas count-up dinámicas
+      activeSlide.querySelectorAll('.count-up').forEach(counter => {
+        const targetVal = parseFloat(counter.getAttribute('data-target'));
+        const isInt = counter.getAttribute('data-integer') === 'true';
+        const isCurrency = counter.getAttribute('data-currency') === 'true';
+        const isPct = counter.getAttribute('data-pct') === 'true';
+        const isNegative = counter.getAttribute('data-negative') === 'true';
+        const rawSuffix = counter.getAttribute('data-suffix') || '';
+        const rawPrefix = counter.getAttribute('data-prefix') || '';
+        
+        let duration = 1200; // 1.2s de animación
+        let startTime = null;
+        
+        function animate(timestamp) {
+          if (!startTime) startTime = timestamp;
+          let progress = timestamp - startTime;
+          let percent = Math.min(progress / duration, 1);
+          
+          // outQuad Easing
+          let easePct = percent * (2 - percent);
+          let currentVal = easePct * targetVal;
+          
+          let displayVal = isInt ? Math.floor(currentVal).toString() : currentVal.toFixed(1);
+          
+          let formatted = displayVal;
+          if (isCurrency) formatted = '$' + formatted;
+          if (isNegative) formatted = '-' + formatted;
+          if (isPct) formatted = formatted + '%';
+          
+          counter.textContent = rawPrefix + formatted + rawSuffix;
+          
+          if (percent < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            // Fijar exactitud final
+            let finalVal = isInt ? targetVal.toString() : targetVal.toFixed(1);
+            if (isCurrency) finalVal = '$' + finalVal;
+            if (isNegative) finalVal = '-' + finalVal;
+            if (isPct) finalVal = finalVal + '%';
+            counter.textContent = rawPrefix + finalVal + rawSuffix;
+          }
+        }
+        
+        // Start count
+        counter.textContent = (isCurrency ? '$' : '') + (isNegative ? '-' : '') + '0' + (isPct ? '%' : '') + rawSuffix;
+        requestAnimationFrame(animate);
+      });
+
+      // Dibujar flechas SVG del modelo de izquierda a derecha
+      activeSlide.querySelectorAll('.flow-arrow-path').forEach(path => {
+        path.style.strokeDashoffset = '100';
+        // Forzar reflow del DOM para que el navegador capte el cambio
+        path.getBoundingClientRect();
+        path.style.strokeDashoffset = '0';
+      });
+    }
+
+    // Disparo inicial en carga de la diapositiva 1
+    triggerSlideAnimations(1);
+
+    /* =========================================================================
+       5. CONTROL DE TOOLTIPS INTERACTIVOS EN HOVER
+       ========================================================================= */
+    const tooltip = document.getElementById('chart-tooltip');
+
+    function showTooltip(e, name, detail) {
+      tooltip.style.opacity = '1';
+      tooltip.innerHTML = `<strong>${name}</strong><br>${detail}`;
+      
+      // Obtener coordenadas locales del mouse relativas al máster container
+      const containerRect = container.getBoundingClientRect();
+      
+      // Calcular factor de escala actual
+      const targetWidth = 1280;
+      const windowWidth = window.innerWidth;
+      const scale = windowWidth / targetWidth;
+      
+      // Posicionar el tooltip sumando un offset y corrigiendo por escala
+      const x = (e.clientX - containerRect.left) / (containerRect.width / targetWidth) + 15;
+      const y = (e.clientY - containerRect.top) / (containerRect.height / 720) + 15;
+
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y}px`;
+    }
+
+    function hideTooltip() {
+      tooltip.style.opacity = '0';
+    }
+
+    /* =========================================================================
+       6. ENTRADA Y CONTROL DE ERRORES EN IMÁGENES LOCALES
+       ========================================================================= */
+    function handleImageError(img, filename) {
+      const parent = img.parentElement;
+      img.style.display = 'none';
+
+      // Crear placeholder punteado verde Subway
+      const fallback = document.createElement('div');
+      fallback.className = 'image-error-placeholder';
+      fallback.innerHTML = `
+        <svg viewBox="0 0 100 80" class="placeholder-svg">
+          <rect width="100" height="80" rx="6" fill="none" stroke="var(--green-subway)" stroke-width="2" stroke-dasharray="4 4"/>
+          <path d="M30,50 L45,35 L55,45 L70,30 L80,40 M35,30 C35,27.2 32.8,25 30,25 C27.2,25 25,27.2 25,30 C25,32.8 27.2,35 30,35 C32.8,35 35,32.8 35,30 Z" fill="none" stroke="var(--grey-medium)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="placeholder-text">Falta: <span>${filename}</span></div>
+      `;
+      parent.appendChild(fallback);
+    }
+
+    function handleChartError(img, chartName, iconType) {
+      const parent = img.parentElement;
+      img.style.display = 'none';
+
+      let svgIcon = '';
+      if (iconType === 'waterfall') {
+        svgIcon = `<path d="M15,80 L25,80 L25,45 L40,45 L40,30 L55,30 L55,50 L70,50 L70,85 L85,85" fill="none" stroke="var(--green-subway)" stroke-width="2.5" stroke-linecap="round"/>`;
+      } else if (iconType === 'roi') {
+        svgIcon = `<path d="M20,80 L20,20 M20,80 L80,80 M30,70 L55,45 L75,15" fill="none" stroke="var(--green-subway)" stroke-width="2.5" stroke-linecap="round"/><circle cx="75" cy="15" r="4.5" fill="var(--yellow-subway)" stroke="var(--green-subway)" stroke-width="1.5"/>`;
+      } else if (iconType === 'matrix') {
+        svgIcon = `<circle cx="35" cy="65" r="4.5" fill="var(--green-subway)"/><circle cx="55" cy="35" r="4.5" fill="var(--green-subway)"/><circle cx="70" cy="55" r="4.5" fill="var(--yellow-subway)" stroke="var(--green-subway)" stroke-width="1.5"/><circle cx="80" cy="25" r="4.5" fill="var(--green-subway)"/>`;
+      } else if (iconType === 'fitted') {
+        svgIcon = `<path d="M15,65 Q35,25 55,75 T95,35" fill="none" stroke="var(--green-subway)" stroke-width="2"/><path d="M15,70 Q35,30 55,80 T95,40" fill="none" stroke="var(--grey-medium)" stroke-width="2" stroke-dasharray="3 3"/>`;
+      } else if (iconType === 'mix') {
+        svgIcon = `<rect x="30" y="45" width="16" height="35" fill="var(--green-subway)" rx="2"/><rect x="60" y="25" width="16" height="55" fill="var(--yellow-subway)" stroke="var(--green-subway)" stroke-width="1.5" rx="2"/>`;
+      } else {
+        svgIcon = `<path d="M20,80 L40,60 L60,45 L80,25 M20,80 A60,60 0 0,1 80,20" fill="none" stroke="var(--green-subway)" stroke-width="2.5"/>`;
+      }
+
+      const fallback = document.createElement('div');
+      fallback.className = 'chart-error-placeholder';
+      fallback.innerHTML = `
+        <svg viewBox="0 0 100 100" class="chart-placeholder-svg">
+          ${svgIcon}
+        </svg>
+        <div class="chart-placeholder-text">${chartName}</div>
+      `;
+      parent.appendChild(fallback);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subway Colombia – Estrategia de Medios y MMM</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* VARIABLES DE COLOR OFICIALES SUBWAY */
+    :root {
+      --green-subway: #009B3A;
+      --yellow-subway: #FFC423;
+      --white: #FFFFFF;
+      --black: #1A1A1A;
+      --grey-medium: #6B6B6B;
+      --grey-light: #F5F5F5;
+      --green-dark: #007A2E;
+      --green-soft: #E6F5EC;
+      --yellow-soft: #FFFDF0;
+      --font-family: 'Inter', sans-serif;
+      --transition-speed: 0.4s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0c0c0c;
+      font-family: var(--font-family);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+      color: var(--black);
+      user-select: none;
+    }
+
+    /* CONTENEDOR BASE 16:9 RESPONSIVE */
+    .presentation-container {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+      overflow: hidden;
+      background-color: var(--white);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      transform-origin: center center;
+    }
+
+    /* DIAPOSITIVAS */
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity var(--transition-speed) ease-in-out;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 60px;
+      box-sizing: border-box;
+      background-color: var(--white);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* PORTADA, LA GRAN IDEA Y CIERRE TIENEN FONDOS DE COLOR */
+    .slide.bg-green {
+      background-color: var(--green-subway);
+      color: var(--white);
+    }
+
+    .slide.bg-black {
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    .slide.bg-grey {
+      background-color: var(--grey-light);
+      color: var(--black);
+    }
+
+    /* HEADER COMÚN EN SLIDES DE CONTENIDO */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--grey-light);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .slide-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--green-subway);
+    }
+
+    /* LOGO SUBWAY® ESTILIZADO */
+    .subway-logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .subway-logo-svg {
+      height: 32px;
+      width: auto;
+    }
+
+    /* CONTENIDO DE SLIDE */
+    .slide-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    /* PIE DE PÁGINA COMÚN */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--grey-medium);
+      border-top: 1px solid var(--grey-light);
+      padding-top: 12px;
+      margin-top: 16px;
+    }
+
+    .slide-footer.dark-footer {
+      color: #888888;
+      border-top: 1px solid #333333;
+    }
+
+    /* BOTONES Y MENÚ INFERIOR DE NAVEGACIÓN */
+    .controls-overlay {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .control-btn {
+      background-color: rgba(26, 26, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .control-btn:hover {
+      background-color: var(--green-subway);
+      transform: scale(1.05);
+    }
+
+    .control-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* BARRA DE PROGRESO */
+    .progress-bar-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background-color: #E0E0E0;
+      display: flex;
+      z-index: 999;
+    }
+
+    .progress-segment {
+      flex: 1;
+      height: 100%;
+      background-color: transparent;
+      transition: background-color 0.3s;
+      border-right: 1px solid var(--white);
+    }
+
+    .progress-segment.active {
+      background-color: var(--green-subway);
+    }
+
+    .progress-segment.current {
+      background-color: var(--yellow-subway);
+    }
+
+    /* COMPONENTES GENERALES Y LAYOUTS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      height: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-2-1 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .grid-55-45 {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: 24px;
+      height: 100%;
+    }
+
+    /* METRIC CARDS */
+    .metric-cards-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .metric-card {
+      background-color: var(--grey-light);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 4px solid var(--green-subway);
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--grey-medium);
+      line-height: 1.3;
+    }
+
+    /* INSIGHT BOX (YELLOW BOX) */
+    .insight-box {
+      background-color: var(--yellow-soft);
+      border: 1px solid rgba(255, 196, 35, 0.4);
+      border-left: 6px solid var(--yellow-subway);
+      padding: 14px 20px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--black);
+      font-weight: 500;
+    }
+
+    .insight-box-title {
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* PORTADA SLIDE STYLING */
+    .portada-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      gap: 24px;
+    }
+
+    .portada-logo {
+      width: 420px;
+      margin-bottom: 10px;
+    }
+
+    .portada-title {
+      font-size: 46px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+    .portada-subtitle {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--yellow-subway);
+    }
+
+    .portada-divider {
+      width: 120px;
+      height: 4px;
+      background-color: var(--yellow-subway);
+      margin: 10px 0;
+      border-radius: 2px;
+    }
+
+    .portada-academic {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 20px;
+    }
+
+    /* LA GRAN IDEA STYLING */
+    .idea-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding: 0 40px;
+      gap: 30px;
+    }
+
+    .idea-highlight {
+      font-size: 54px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--white);
+      letter-spacing: -1.5px;
+    }
+
+    .idea-highlight span {
+      background-color: var(--yellow-subway);
+      color: var(--black);
+      padding: 2px 10px;
+      border-radius: 4px;
+    }
+
+    .idea-text {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #CCCCCC;
+      max-width: 1000px;
+      font-weight: 400;
+    }
+
+    /* CHART WRAPPERS */
+    .chart-container {
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .chart-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--grey-light);
+      padding-bottom: 6px;
+    }
+
+    .chart-canvas-wrapper {
+      position: relative;
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 180px;
+    }
+
+    /* SVG MAP & CHART STYLING */
+    .map-legend {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--grey-medium);
+      padding: 0 10px;
+    }
+
+    .legend-bar {
+      height: 8px;
+      flex-grow: 1;
+      margin: 0 10px;
+      background: linear-gradient(to right, #E6F5EC, #009B3A);
+      border-radius: 4px;
+    }
+
+    /* CARD STYLING FOR DIAGRAMS */
+    .diagram-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .diagram-column-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--green-subway);
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .diagram-card {
+      background: var(--grey-light);
+      border: 1px solid #E0E0E0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .diagram-card-title {
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .diagram-arrow-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .target-kpi-box {
+      background-color: var(--green-subway);
+      color: var(--white);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 16px;
+      border: 2px solid var(--yellow-subway);
+      box-shadow: 0 4px 10px rgba(0, 155, 58, 0.2);
+    }
+
+    .equation-box {
+      background-color: var(--grey-light);
+      font-family: 'Fira Code', monospace;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      text-align: center;
+      color: #333;
+      border: 1px dashed #CCC;
+    }
+
+    /* PLACEHOLDER MMM STYLING */
+    .mmm-placeholder-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      flex-grow: 1;
+      height: 380px;
+      min-height: 0;
+    }
+
+    .mmm-placeholder-card {
+      background: var(--white);
+      border: 1px solid rgba(0, 155, 58, 0.15);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
+    }
+
+    .mmm-placeholder-card:hover {
+      border-color: var(--green-subway);
+      box-shadow: 0 6px 15px rgba(0, 155, 58, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .mmm-placeholder-id {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--green-subway);
+      background-color: var(--green-soft);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .mmm-placeholder-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    /* ARQUETIPOS Y SCATTER PLOT */
+    .archetypes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .archetype-card {
+      border: 1px solid #E0E0E0;
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background: var(--white);
+    }
+
+    .archetype-card.target-primary {
+      border: 2px solid var(--yellow-subway);
+      background-color: var(--yellow-soft);
+    }
+
+    .archetype-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--yellow-subway);
+      color: var(--black);
+      font-size: 8px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .archetype-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green-subway);
+      margin-bottom: 4px;
+    }
+
+    .archetype-audience {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .archetype-audience span {
+      font-size: 10px;
+      color: var(--grey-medium);
+      font-weight: 400;
+    }
+
+    .archetype-details {
+      font-size: 10px;
+      color: var(--black);
+      line-height: 1.4;
+    }
+
+    .archetype-details strong {
+      color: var(--grey-medium);
+      font-weight: 500;
+    }
+
+    /* UX DIGITAL & BENCHMARK */
+    .barrier-card {
+      display: flex;
+      align-items: center;
+      background: var(--grey-light);
+      border-left: 4px solid var(--green-subway);
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .barrier-percentage {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--yellow-subway);
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+      min-width: 65px;
+    }
+
+    .barrier-info {
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .barrier-info strong {
+      font-size: 12px;
+      color: var(--black);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .benchmark-block {
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+
+    .benchmark-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .benchmark-country {
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .benchmark-mini-bar {
+      width: 100px;
+      height: 8px;
+      background-color: #E0E0E0;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .mini-bar-digital {
+      height: 100%;
+      background-color: var(--green-subway);
+    }
+
+    .mini-bar-trad {
+      height: 100%;
+      background-color: #999;
+    }
+
+    .benchmark-learning {
+      font-size: 10.5px;
+      color: var(--green-dark);
+      background-color: var(--green-soft);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* TABLES */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .table-custom {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      text-align: left;
+    }
+
+    .table-custom th {
+      background-color: var(--green-subway);
+      color: var(--white);
+      font-weight: 700;
+      padding: 8px 10px;
+      text-transform: uppercase;
+      font-size: 9.5px;
+      letter-spacing: 0.5px;
+    }
+
+    .table-custom td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #E0E0E0;
+      line-height: 1.4;
+      vertical-align: top;
+    }
+
+    .table-custom tr:nth-child(even) td {
+      background-color: var(--grey-light);
+    }
+
+    .table-custom tr.highlighted-row td {
+      background-color: var(--green-soft) !important;
+      border-top: 1px solid rgba(0, 155, 58, 0.2);
+      border-bottom: 1px solid rgba(0, 155, 58, 0.2);
+    }
+
+    .table-custom th:first-child, .table-custom td:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    .table-custom th:last-child, .table-custom td:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* STORYTELLING FLOWCHART */
+    .flow-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      padding: 20px 0;
+      margin: 10px 0;
+    }
+
+    .flow-node {
+      background: var(--white);
+      border: 2px solid var(--green-subway);
+      border-radius: 8px;
+      padding: 12px;
+      width: 155px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .flow-node-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+
+    .flow-node-source {
+      font-size: 9px;
+      color: var(--green-dark);
+      background-color: var(--green-soft);
+      padding: 2px 6px;
+      border-radius: 10px;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .flow-arrow-svg {
+      width: 40px;
+      height: 24px;
+      z-index: 1;
+    }
+
+    .checklist-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 14px;
+      background-color: var(--grey-light);
+      border-radius: 8px;
+      font-size: 11px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* CIERRE DIAPOSITIVA */
+    .cierre-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      gap: 20px;
+      padding: 0 60px;
+    }
+
+    .cierre-title {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -1.5px;
+    }
+
+    .cierre-highlight {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--yellow-subway);
+    }
+
+    .cierre-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #CCCCCC;
+      max-width: 800px;
+      margin-top: 10px;
+    }
+
+    /* LISTA PREGUNTAS */
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .question-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--grey-light);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .question-icon {
+      width: 18px;
+      height: 18px;
+      fill: var(--green-subway);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .question-text {
+      line-height: 1.4;
+    }
+
+    .question-text span {
+      color: var(--grey-medium);
+      font-weight: 500;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="presentation-container">
+    
+    <!-- BARRA DE PROGRESO INFERIOR -->
+    <div class="progress-bar-container" id="progress-bar">
+      <!-- Generado dinámicamente por JS -->
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 1 — PORTADA
+         ======================================================================= -->
+    <div class="slide bg-green active" id="slide-1">
+      <div></div> <!-- Spacer para flexbox -->
+      <div class="portada-content">
+        <!-- Logo Subway estilizado en SVG grande -->
+        <svg class="portada-logo" viewBox="0 0 320 80" width="320">
+          <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+            <text x="10" y="60" fill="#FFC423">SUB</text>
+            <text x="138" y="60" fill="#FFFFFF">WAY</text>
+          </g>
+          <!-- Flecha de la S -->
+          <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+          <!-- Flecha de la Y -->
+          <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#FFFFFF" />
+        </svg>
+        <div class="portada-title">Estrategia de Medios y MMM</div>
+        <div class="portada-subtitle">Subway Colombia · 2025–2026</div>
+        <div class="portada-divider"></div>
+        <div class="portada-academic">Antigravity / Proyecto académico — Universidad Externado de Colombia</div>
+      </div>
+      <div class="slide-footer dark-footer" style="border-top: none;">
+        <span>CONFIDENCIAL — EXCLUSIVO PARA USO ACADÉMICO</span>
+        <span>DIAPOSITIVA 1 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 2 — LA GRAN IDEA
+         ======================================================================= -->
+    <div class="slide bg-black" id="slide-2">
+      <div></div>
+      <div class="idea-content">
+        <div class="idea-highlight">La <span>paradoja de notoriedad</span>.</div>
+        <div class="idea-text">
+          Subway Colombia es altamente eficiente en capturar búsquedas orgánicas en la periferia donde no enfrenta competencia física, pero es invisible en Bogotá, Medellín y Cali —los tres mercados que concentran el 70% del PIB de la categoría— porque destina el 99.53% de su pauta a televisión masiva desalineada estacionalmente, cediendo por completo el ecosistema digital a McDonald's.
+        </div>
+      </div>
+      <div class="slide-footer dark-footer">
+        <span>INFERENCIA ESTRATÉGICA CLAVE</span>
+        <span>DIAPOSITIVA 2 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 3 — CONTEXTO DE MERCADO + KPI + DESAJUSTE SOI/SOS
+         ======================================================================= -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <!-- Logo Subway Superior -->
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">Contexto de Mercado y Desajuste Digital</div>
+      </div>
+      <div class="slide-body">
+        <!-- ZONA SUPERIOR: METRIC CARDS -->
+        <div class="metric-cards-row">
+          <div class="metric-card">
+            <div class="metric-value">USD 1,964M</div>
+            <div class="metric-label">Mercado QSR Colombia (Valor total anual)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">CAGR 6.4%</div>
+            <div class="metric-label">Crecimiento proyectado hacia 2035</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">3.5%</div>
+            <div class="metric-label">Market Share de Subway en la categoría</div>
+          </div>
+          <div class="metric-card" style="border-left-color: var(--yellow-subway);">
+            <div class="metric-value">-11.9%</div>
+            <div class="metric-label">Confianza del Consumidor (ICC promedio)</div>
+          </div>
+        </div>
+
+        <!-- ZONA MEDIA: GRÁFICOS LADO A LADO -->
+        <div class="grid-2" style="flex-grow: 1; min-height: 240px; max-height: 280px;">
+          <!-- Gráfico Izquierda: SOS Promedio -->
+          <div class="chart-container">
+            <div class="chart-title">Share of Search (SOS) Promedio Categoría</div>
+            <div class="chart-canvas-wrapper" style="padding-top: 10px;">
+              <!-- Barras Horizontales en SVG nativo para asegurar renderización impecable -->
+              <svg viewBox="0 0 500 180" width="100%" height="100%">
+                <!-- McDonald's -->
+                <text x="0" y="25" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#1A1A1A">McDonald's</text>
+                <rect x="110" y="12" width="244" height="16" fill="#A0A0A0" rx="3" />
+                <text x="360" y="25" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#6B6B6B">34.85%</text>
+
+                <!-- Domino's -->
+                <text x="0" y="60" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#1A1A1A">Domino's</text>
+                <rect x="110" y="47" width="174" height="16" fill="#A0A0A0" rx="3" />
+                <text x="290" y="60" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#6B6B6B">24.92%</text>
+
+                <!-- KFC -->
+                <text x="0" y="95" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#1A1A1A">KFC</text>
+                <rect x="110" y="82" width="168" height="16" fill="#A0A0A0" rx="3" />
+                <text x="284" y="95" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#6B6B6B">23.99%</text>
+
+                <!-- Subway -->
+                <text x="0" y="130" font-family="'Inter', sans-serif" font-size="11" font-weight="900" fill="#009B3A">Subway</text>
+                <rect x="110" y="117" width="65" height="16" fill="#009B3A" rx="3" />
+                <text x="180" y="130" font-family="'Inter', sans-serif" font-size="11" font-weight="900" fill="#009B3A">9.26%</text>
+
+                <!-- Burger King -->
+                <text x="0" y="165" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#1A1A1A">Burger King</text>
+                <rect x="110" y="152" width="49" height="16" fill="#A0A0A0" rx="3" />
+                <text x="165" y="165" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#6B6B6B">6.99%</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Gráfico Derecha: SOI Tradicional vs SOI Digital -->
+          <div class="chart-container">
+            <div class="chart-title">Share of Voice (SOI) Tradicional vs Digital</div>
+            <div class="chart-canvas-wrapper" style="display: flex; justify-content: space-around; align-items: center;">
+              <!-- Donut SOI Tradicional -->
+              <div style="text-align: center; width: 45%;">
+                <svg viewBox="0 0 100 100" width="100" height="100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#E0E0E0" stroke-width="14"/>
+                  <!-- Subway 1.44% -->
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#009B3A" stroke-width="14" 
+                          stroke-dasharray="9 242" stroke-dashoffset="63" transform="rotate(-90 50 50)"/>
+                  <text x="50" y="55" font-family="'Inter', sans-serif" font-size="12" font-weight="900" text-anchor="middle" fill="#009B3A">1.44%</text>
+                </svg>
+                <div style="font-size: 11px; font-weight: 700; margin-top: 6px; color: var(--black);">SOI Tradicional</div>
+                <div style="font-size: 9px; color: var(--grey-medium);">Subway destacado</div>
+              </div>
+
+              <!-- Donut SOI Digital -->
+              <div style="text-align: center; width: 45%;">
+                <svg viewBox="0 0 100 100" width="100" height="100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#E0E0E0" stroke-width="14"/>
+                  <!-- Subway 0.94% in green, McDonald's 83.68% in yellow -->
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFC423" stroke-width="14" 
+                          stroke-dasharray="210 41" stroke-dashoffset="-3" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#009B3A" stroke-width="14" 
+                          stroke-dasharray="2.5 248.5" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                  <text x="50" y="55" font-family="'Inter', sans-serif" font-size="12" font-weight="900" text-anchor="middle" fill="#009B3A">0.94%</text>
+                </svg>
+                <div style="font-size: 11px; font-weight: 700; margin-top: 6px; color: var(--black);">SOI Digital</div>
+                <div style="font-size: 9px; color: var(--grey-medium);">Subway (verde) vs McD (83.7% amarillo)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZONA INFERIOR: INSIGHT BOX -->
+        <div class="insight-box">
+          <div class="insight-box-title">Diagnóstico de Desequilibrio de Medios</div>
+          La brecha digital con McDonald's en Share of Voice es de <strong>88.9x</strong>. Subway captura el <strong>9.26%</strong> de las búsquedas orgánicas de la categoría invirtiendo solo el <strong>0.94%</strong> del presupuesto digital del sector — pero carece de pauta pagada para defender esta demanda acumulada de marca.
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Fuentes: Google Trends (Ene 2023 - Dic 2025), Infoanálisis y Admetricks Colombia.</span>
+        <span>DIAPOSITIVA 3 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 4 — LA TRAMPA PERIFÉRICA + DESAJUSTE ESTACIONAL
+         ======================================================================= -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">La Trampa Periférica y Desajuste Estacional</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2" style="flex-grow: 1;">
+          <!-- COLUMNA IZQUIERDA: MAPA DE COLOMBIA SVG -->
+          <div class="chart-container">
+            <div class="chart-title">Relevante donde no hay caja. Invisible donde está el PIB.</div>
+            <div class="chart-canvas-wrapper" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <!-- Representación geométrica premium de Colombia por departamentos con share de búsqueda -->
+              <svg viewBox="0 0 280 240" width="220" height="200">
+                <!-- Caribe / San Andrés (Círculo aislado en el mar) -->
+                <circle cx="50" cy="40" r="14" fill="#006622" stroke="#fff" stroke-width="1.5" />
+                <text x="50" y="59" font-family="'Inter', sans-serif" font-size="8" font-weight="700" text-anchor="middle">San Andrés (41%)</text>
+                
+                <!-- La Guajira -->
+                <polygon points="175,20 200,10 190,40" fill="#009B3A" stroke="#fff" stroke-width="1" />
+                <text x="210" y="28" font-family="'Inter', sans-serif" font-size="8" font-weight="700">Guajira (21%)</text>
+
+                <!-- Costa Caribe (Sucre, Cesar) -->
+                <polygon points="110,40 175,20 190,40 160,70 115,65" fill="#2EAA5C" stroke="#fff" stroke-width="1" />
+                <text x="135" y="50" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#fff">Sucre/Cesar (17%)</text>
+
+                <!-- Antioquia -->
+                <polygon points="100,70 130,70 140,110 100,110" fill="#A3DFB9" stroke="#fff" stroke-width="1" />
+                <text x="80" y="90" font-family="'Inter', sans-serif" font-size="8" font-weight="700">Antioquia (9%)</text>
+
+                <!-- Bogotá (Cundinamarca) -->
+                <polygon points="135,110 165,110 160,150 130,150" fill="#E6F5EC" stroke="#fff" stroke-width="1" />
+                <circle cx="150" cy="130" r="5" fill="#FFC423" />
+                <text x="175" y="133" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#007A2E">Bogotá (7%)</text>
+
+                <!-- Valle del Cauca -->
+                <polygon points="80,115 110,115 100,155 75,145" fill="#C2ECD2" stroke="#fff" stroke-width="1" />
+                <text x="45" y="140" font-family="'Inter', sans-serif" font-size="8" font-weight="700">Valle (8%)</text>
+              </svg>
+              
+              <div class="map-legend" style="width: 100%;">
+                <span>7% (Bajo SOS - PIB Alto)</span>
+                <div class="legend-bar"></div>
+                <span>41% (Alto SOS - Periferia)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: GRÁFICO COMBINADO INVERSIÓN VS DEMANDA -->
+          <div class="chart-container">
+            <div class="chart-title">Descalce Estacional: Presupuesto vs Demanda</div>
+            <div class="chart-canvas-wrapper">
+              <svg viewBox="0 0 500 180" width="100%" height="100%">
+                <!-- Gridlines -->
+                <line x1="40" y1="20" x2="480" y2="20" stroke="#F0F0F0" stroke-width="1"/>
+                <line x1="40" y1="60" x2="480" y2="60" stroke="#F0F0F0" stroke-width="1"/>
+                <line x1="40" y1="100" x2="480" y2="100" stroke="#F0F0F0" stroke-width="1"/>
+                <line x1="40" y1="140" x2="480" y2="140" stroke="#F0F0F0" stroke-width="1"/>
+                
+                <!-- Barras de Inversión (Gris) -->
+                <!-- Ene (80), Feb (90), Mar (110), Abr (120), May (100), Jun (95), Jul (60), Ago (50), Sep (40), Oct (35), Nov (45), Dic (30) -->
+                <rect x="52" y="60" width="18" height="80" fill="#CCCCCC" rx="2" />
+                <rect x="88" y="50" width="18" height="90" fill="#CCCCCC" rx="2" />
+                <rect x="124" y="30" width="18" height="110" fill="#CCCCCC" rx="2" />
+                <rect x="160" y="20" width="18" height="120" fill="#CCCCCC" rx="2" />
+                <rect x="196" y="40" width="18" height="100" fill="#CCCCCC" rx="2" />
+                <rect x="232" y="45" width="18" height="95" fill="#CCCCCC" rx="2" />
+                <rect x="268" y="80" width="18" height="60" fill="#CCCCCC" rx="2" />
+                <rect x="304" y="90" width="18" height="50" fill="#CCCCCC" rx="2" />
+                <rect x="340" y="100" width="18" height="40" fill="#CCCCCC" rx="2" />
+                <rect x="376" y="105" width="18" height="35" fill="#CCCCCC" rx="2" />
+                <rect x="412" y="95" width="18" height="45" fill="#CCCCCC" rx="2" />
+                <!-- Diciembre en color destacado para remarcar descalce -->
+                <rect x="448" y="110" width="18" height="30" fill="#FFC423" rx="2" />
+
+                <!-- Línea de SOS (Verde) -->
+                <!-- Ene (8.5), Feb (8.7), Mar (9.0), Abr (8.8), May (9.1), Jun (9.3), Jul (9.8), Ago (9.2), Sep (9.0), Oct (9.3), Nov (9.9), Dic (11.8) -->
+                <!-- Coordenadas calculadas: Y = 140 - (SOS - 5) * 15 -->
+                <path d="M 61,87 L 97,84 L 133,80 L 169,83 L 205,78 L 241,75 L 277,68 L 313,77 L 349,80 L 385,75 L 421,66 L 457,38" 
+                      fill="none" stroke="#009B3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                
+                <!-- Puntos de la línea -->
+                <circle cx="61" cy="87" r="4" fill="#009B3A" />
+                <circle cx="97" cy="84" r="4" fill="#009B3A" />
+                <circle cx="133" cy="80" r="4" fill="#009B3A" />
+                <circle cx="169" cy="83" r="4" fill="#009B3A" />
+                <circle cx="205" cy="78" r="4" fill="#009B3A" />
+                <circle cx="241" cy="75" r="4" fill="#009B3A" />
+                <circle cx="277" cy="68" r="4" fill="#009B3A" />
+                <circle cx="313" cy="77" r="4" fill="#009B3A" />
+                <circle cx="349" cy="80" r="4" fill="#009B3A" />
+                <circle cx="385" cy="75" r="4" fill="#009B3A" />
+                <circle cx="421" cy="66" r="4" fill="#009B3A" />
+                <circle cx="457" cy="38" r="5" fill="#FFC423" stroke="#009B3A" stroke-width="2" />
+
+                <!-- Eje X Meses -->
+                <text x="61" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Ene</text>
+                <text x="97" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Feb</text>
+                <text x="133" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Mar</text>
+                <text x="169" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Abr</text>
+                <text x="205" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">May</text>
+                <text x="241" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Jun</text>
+                <text x="277" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Jul</text>
+                <text x="313" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Ago</text>
+                <text x="349" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Sep</text>
+                <text x="385" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Oct</text>
+                <text x="421" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#6B6B6B">Nov</text>
+                <text x="457" y="158" font-family="'Inter', sans-serif" font-size="9" text-anchor="middle" fill="#009B3A" font-weight="700">Dic</text>
+
+                <!-- Leyendas -->
+                <rect x="300" y="5" width="12" height="6" fill="#CCCCCC" />
+                <text x="318" y="11" font-family="'Inter', sans-serif" font-size="8" fill="#6B6B6B">Inversión Subway</text>
+                <line x1="400" y1="8" x2="415" y2="8" stroke="#009B3A" stroke-width="2"/>
+                <text x="422" y="11" font-family="'Inter', sans-serif" font-size="8" fill="#6B6B6B">SOS Subway (%)</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZONA INFERIOR: INSIGHT BOX -->
+        <div class="insight-box">
+          <div class="insight-box-title">Desajuste de Medios Estacional en Diciembre</div>
+          Subway retira presupuesto publicitario en el mes de mayor consumo de la categoría (diciembre), justo cuando el consumidor cuenta con más liquidez disponible por primas navideñas y la demanda de la marca aumenta de forma natural.
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Fuente: Google Trends e Infoanálisis (Consolidado Histórico).</span>
+        <span>DIAPOSITIVA 4 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 5 — VARIABLES DEL MODELO MMM
+         ======================================================================= -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">Estructura del Modelo de Regresión OLS</div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- DIAGRAMA DE VARIABLES -->
+        <div class="grid-3" style="flex-grow: 1; align-items: stretch; margin-top: 10px;">
+          <!-- Columna 1: Medios Propios -->
+          <div class="diagram-column">
+            <div class="diagram-column-title">Medios Propios</div>
+            <div class="diagram-card">
+              <div class="diagram-card-title">TV Tradicional ($497.2M COP)</div>
+              Inversión acumulada en televisión abierta/cable. Aplicación de decaimiento Adstock (decay = 0.5) para medir el arrastre publicitario.
+            </div>
+            <div class="diagram-card">
+              <div class="diagram-card-title">Digital ($23.4M COP)</div>
+              Pauta digital (redes sociales, display, search). Aplicación de decaimiento Adstock (decay = 0.3) por la inmediatez de la conversión.
+            </div>
+            <div class="diagram-card">
+              <div class="diagram-card-title">Radio y OOH</div>
+              Gastos tácticos de soporte en radio regional y vallas urbanas sin decaimiento directo en el modelo base.
+            </div>
+          </div>
+
+          <!-- Columna 2: Variables Exógenas -->
+          <div class="diagram-column">
+            <div class="diagram-column-title">Variables Exógenas</div>
+            <div class="diagram-card">
+              <div class="diagram-card-title">IPC Alimentos (DANE)</div>
+              Inflación mensual de alimentos en Colombia (interpolación lineal a escala semanal) para evaluar sensibilidad al precio.
+            </div>
+            <div class="diagram-card">
+              <div class="diagram-card-title">ICC Confianza (Fedesarrollo)</div>
+              Índice de Confianza del Consumidor para calibrar la disposición a gastar en comida fuera del hogar.
+            </div>
+            <div class="diagram-card">
+              <div class="diagram-card-title">Dummies Estacionales</div>
+              Variables de control binarias para Semana Santa, temporada vacacional de julio y festividades de diciembre.
+            </div>
+          </div>
+
+          <!-- Columna 3: Competencia -->
+          <div class="diagram-column">
+            <div class="diagram-column-title">Competencia</div>
+            <div class="diagram-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-card-title">Share of Search Competidores</div>
+              Búsquedas relativas semanales de:
+              <ul style="margin-left: 16px; margin-top: 6px;">
+                <li>McDonald's</li>
+                <li>Domino's Pizza</li>
+                <li>KFC</li>
+                <li>Burger King</li>
+              </ul>
+              <div style="font-size: 9px; color: var(--grey-medium); margin-top: 8px;">
+                Construye el indicador de "Presión Competitiva" del mercado.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FLECHA CONVERGIENTE A KPI -->
+        <div class="diagram-arrow-box" style="margin: 4px 0;">
+          <svg viewBox="0 0 100 20" width="80" height="20">
+            <path d="M 10 10 L 80 10 M 80 5 L 90 10 L 80 15" fill="none" stroke="#009B3A" stroke-width="3" />
+          </svg>
+          <div class="target-kpi-box" style="margin-left: 10px; width: 450px;">
+            KPI: Share of Search Subway Colombia (66 Semanas Evaluadas)
+          </div>
+        </div>
+
+        <!-- ECUACIÓN DEL MODELO -->
+        <div class="equation-box">
+          Trends_Subway(t) = &beta;&sup1;&middot;AdstockTV(t) + &beta;&sup2;&middot;AdstockDig(t) + &beta;&sup3;&middot;PresionCompetitiva(t) + &beta;&sup4;&middot;IPC(t) + &beta;&sup5;&middot;ICC(t) + &beta;&sup6;&middot;D_SemanaSanta + &beta;&sup7;&middot;D_Vacaciones + &beta;&sup8;&middot;D_Diciembre + &epsilon;
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Supuestos: Burger King imputado con $0 digital debido a la falta de cobertura en Admetricks. TV Nacional 58% sin ciudad explícita.</span>
+        <span>DIAPOSITIVA 5 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 6 — ESPACIO RESERVADO MODELO MMM
+         ======================================================================= -->
+    <div class="slide bg-grey" id="slide-6">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title" style="color: var(--green-subway);">Resultados del Modelo MMM</div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- PLACEHOLDERS GRID -->
+        <div class="mmm-placeholder-grid">
+          
+          <div class="mmm-placeholder-card" id="mmm-chart-1">
+            <img src="subway_mmm_waterfall.png" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+
+          <div class="mmm-placeholder-card" id="mmm-chart-2">
+            <img src="subway_mmm_efficiency_matrix.png" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+
+          <div class="mmm-placeholder-card" id="mmm-chart-3">
+            <img src="subway_mmm_fitted_vs_real.png" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+
+          <div class="mmm-placeholder-card" id="mmm-chart-4">
+            <img src="subway_mmm_mix_optimal.png" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+
+        </div>
+
+        <div class="insight-box" style="background-color: var(--yellow-soft); border-left-color: var(--yellow-subway); padding: 8px 16px; font-size: 11.5px; line-height: 1.4;">
+          <div class="insight-box-title">Conclusión e Insight de Negocio (Fases 4 y 5)</div>
+          El modelo confirma que la inversión actual en TV Nacional está saturada (coeficiente no significativo), mientras que los canales digitales segmentados presentan una elasticidad 24.1x superior. Rebalancear el mix de medios hacia un 80% digital permite proyectar un aumento de **+190.6%** en el Share of Search (SOS), capturando la demanda en los grandes centros urbanos (Bogotá, Medellín y Cali) donde se concentra el dinero.
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Fuente: Salida técnica de statsmodels en Python (`fase3.py`).</span>
+        <span>DIAPOSITIVA 6 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 7 — LOS 4 ARQUETIPOS + MATRIZ DE PRIORIZACIÓN
+         ======================================================================= -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">Arquetipos del Consumidor QSR</div>
+      </div>
+      <div class="slide-body">
+        
+        <div class="grid-55-45">
+          <!-- COLUMNA IZQUIERDA: ARQUETIPOS CARDS -->
+          <div class="archetypes-grid">
+            <!-- Tarjeta 1: El Fit-Consciente Urbano (TARGET) -->
+            <div class="archetype-card target-primary">
+              <span class="archetype-badge">Target Primario</span>
+              <div class="archetype-name">Fit‑Consciente Urbano</div>
+              <div class="archetype-audience">1.8M <span>Audience</span></div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Millennial, NSE 4-6, Bogotá/Medellín.<br>
+                <strong>Motivador:</strong> Comida fresca, balance nutricional y rapidez.<br>
+                <strong>Barrera:</strong> Inconsistencia en frescura, lentitud de la web móvil.
+              </div>
+            </div>
+
+            <!-- Tarjeta 2: El Oficinista Presionado -->
+            <div class="archetype-card">
+              <div class="archetype-name" style="color: #0056B3;">Oficinista Presionado</div>
+              <div class="archetype-audience">3.1M <span>Audience</span></div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Millennial/GenX, NSE 3-5, Zonas Financieras.<br>
+                <strong>Motivador:</strong> Almuerzo rápido, conveniencia de entrega.<br>
+                <strong>Barrera:</strong> Proceso de pago fragmentado, filas en local.
+              </div>
+            </div>
+
+            <!-- Tarjeta 3: El Cazador de Promos -->
+            <div class="archetype-card">
+              <div class="archetype-name" style="color: #D39E00;">Cazador de Promos</div>
+              <div class="archetype-audience">4.2M <span>Audience</span></div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Gen Z (Estudiantes/Jóvenes), NSE 2-4.<br>
+                <strong>Motivador:</strong> Descuentos agresivos, "Sub del Día".<br>
+                <strong>Barrera:</strong> Costos de envío altos, aumentos de precio.
+              </div>
+            </div>
+
+            <!-- Tarjeta 4: El Comprador de CC -->
+            <div class="archetype-card">
+              <div class="archetype-name" style="color: #E67E22;">Comprador de CC</div>
+              <div class="archetype-audience">2.3M <span>Audience</span></div>
+              <div class="archetype-details">
+                <strong>Perfil:</strong> Familias con hijos, NSE 3-5, Bogotá/Cali.<br>
+                <strong>Motivador:</strong> Comodidad los fines de semana, opciones infantiles.<br>
+                <strong>Barrera:</strong> Falta de combos familiares claros en carta digital.
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: SCATTER PLOT SVG -->
+          <div class="chart-container">
+            <div class="chart-title">Matriz de Priorización de Arquetipos</div>
+            <div class="chart-canvas-wrapper" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 280 200" width="100%" height="100%">
+                <!-- Grid Lines -->
+                <line x1="30" y1="100" x2="270" y2="100" stroke="#E0E0E0" stroke-width="1.5" stroke-dasharray="3" />
+                <line x1="150" y1="10" x2="150" y2="190" stroke="#E0E0E0" stroke-width="1.5" stroke-dasharray="3" />
+                
+                <!-- Axes -->
+                <line x1="30" y1="10" x2="30" y2="190" stroke="#6B6B6B" stroke-width="1.5" />
+                <line x1="30" y1="190" x2="270" y2="190" stroke="#6B6B6B" stroke-width="1.5" />
+
+                <!-- Ejes Labels -->
+                <text x="150" y="198" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle" fill="#6B6B6B">Disposición a Pagar</text>
+                <text x="8" y="100" font-family="'Inter', sans-serif" font-size="8" text-anchor="middle" fill="#6B6B6B" transform="rotate(-90 8 100)">Frecuencia de Visita</text>
+
+                <!-- Cuadrante Estrella Label -->
+                <text x="210" y="25" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#009B3A">Cuadrante Estrella ⭐</text>
+
+                <!-- PUNTOS PLOT -->
+                <!-- Fit-Consciente (8.5, 7.0) -> (215, 64) - Círculo Verde -->
+                <circle cx="215" cy="64" r="8" fill="#009B3A" stroke="#FFF" stroke-width="1.5" />
+                <text x="226" y="67" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#009B3A">Fit‑Consciente</text>
+
+                <!-- Oficinista (6.0, 8.0) -> (174, 46) - Triángulo Azul -->
+                <polygon points="174,38 181,51 167,51" fill="#0056B3" stroke="#FFF" stroke-width="1.5" />
+                <text x="187" y="49" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#0056B3">Oficinista</text>
+
+                <!-- Cazador de Promos (3.0, 8.5) -> (102, 37) - Cuadrado Amarillo -->
+                <rect x="95" y="30" width="14" height="14" fill="#FFC423" stroke="#FFF" stroke-width="1.5" />
+                <text x="113" y="40" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#D39E00">Cazador Promos</text>
+
+                <!-- Comprador CC (7.5, 4.0) -> (195, 118) - Rombo Naranja -->
+                <polygon points="195,110 203,118 195,126 187,118" fill="#E67E22" stroke="#FFF" stroke-width="1.5" />
+                <text x="207" y="121" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#E67E22">Comprador CC</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Fuente: Meta Audience Insights y Social Listening (Colombia Q1 2026).</span>
+        <span>DIAPOSITIVA 7 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 8 — UX DIGITAL + BENCHMARK INTERNACIONAL
+         ======================================================================= -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">Conversión Digital y Benchmark LatAm</div>
+      </div>
+      <div class="slide-body">
+        
+        <div class="grid-2">
+          <!-- COLUMNA IZQUIERDA: AUDITORÍA UX -->
+          <div class="chart-container">
+            <div class="chart-title">El punto de conversión digital está roto</div>
+            <div style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+              
+              <div class="barrier-card">
+                <div class="barrier-percentage">45%</div>
+                <div class="barrier-info">
+                  <strong>LCP Móvil 4.8s (Score PageSpeed: 34/100)</strong>
+                  Abandono del carrito debido a la lentitud de carga de imágenes y scripts de la web móvil.
+                  <span style="display: block; font-size: 9px; color: var(--grey-medium); font-weight: 700; margin-top: 2px;">ARQUETIPO: Fit‑Consciente Urbano</span>
+                </div>
+              </div>
+
+              <div class="barrier-card">
+                <div class="barrier-percentage">35%</div>
+                <div class="barrier-info">
+                  <strong>Checkout con 12+ pasos obligatorios</strong>
+                  Falta de "Checkout como Invitado" y campos de texto redundantes que fatigan al usuario.
+                  <span style="display: block; font-size: 9px; color: var(--grey-medium); font-weight: 700; margin-top: 2px;">ARQUETIPO: Oficinista Presionado</span>
+                </div>
+              </div>
+
+              <div class="barrier-card">
+                <div class="barrier-percentage">12%</div>
+                <div class="barrier-info">
+                  <strong>Fallo en Pasarela de Pago Wompi/PSE</strong>
+                  Caídas intermitentes de red y redireccionamientos que cancelan transacciones al final del embudo.
+                  <span style="display: block; font-size: 9px; color: var(--grey-medium); font-weight: 700; margin-top: 2px;">ARQUETIPO: Comprador de CC</span>
+                </div>
+              </div>
+
+              <div class="barrier-card">
+                <div class="barrier-percentage">10%</div>
+                <div class="barrier-info">
+                  <strong>Falta de Geolocalización al Inicio</strong>
+                  Venta de productos que luego no tienen cobertura de entrega en la zona del cliente.
+                  <span style="display: block; font-size: 9px; color: var(--grey-medium); font-weight: 700; margin-top: 2px;">ARQUETIPO: Fit‑Consciente Urbano</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: BENCHMARK -->
+          <div class="chart-container">
+            <div class="chart-title">Cuando Subway activa digital, el KPI reacciona</div>
+            <div style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+              
+              <div class="benchmark-block">
+                <div class="benchmark-header">
+                  <div class="benchmark-country">🇲🇽 México – Estrategia Digital-First</div>
+                  <div class="benchmark-mini-bar">
+                    <div class="mini-bar-digital" style="width: 55%;"></div>
+                    <div class="mini-bar-trad" style="width: 45%;"></div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; line-height: 1.3;">
+                  Inversión en digital (55%) con lanzamiento de <strong>Subway Series</strong> en Twitch. Logró un incremento del <strong>+18% en ventas digitales</strong> en la app móvil.
+                </div>
+                <div class="benchmark-learning">Aprendizaje: Impulsar combos cerrados en un clic para mitigar la fatiga.</div>
+              </div>
+
+              <div class="benchmark-block">
+                <div class="benchmark-header">
+                  <div class="benchmark-country">🇧🇷 Brasil – Patrocinio y Fidelización</div>
+                  <div class="benchmark-mini-bar">
+                    <div class="mini-bar-digital" style="width: 60%;"></div>
+                    <div class="mini-bar-trad" style="width: 40%;"></div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; line-height: 1.3;">
+                  Inversión digital (60%) asociada a la NBA. Cuponera integrada en App y ofertas "Footlong 2x1" en días de juego, logrando <strong>+45% en descargas de app</strong>.
+                </div>
+                <div class="benchmark-learning">Aprendizaje: Conectar ofertas a eventos de alta afinidad local.</div>
+              </div>
+
+              <div class="benchmark-block">
+                <div class="benchmark-header">
+                  <div class="benchmark-country">🇵🇪 Perú – Geolocalización Corporativa</div>
+                  <div class="benchmark-mini-bar">
+                    <div class="mini-bar-digital" style="width: 40%;"></div>
+                    <div class="mini-bar-trad" style="width: 60%;"></div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; line-height: 1.3;">
+                  Pauta geolocalizada en distritos corporativos (Miraflores/San Isidro). Enfoque en el "Sub del Día" para capturar almuerzos de oficina.
+                </div>
+                <div class="benchmark-learning">Aprendizaje: Activar geofencing de 500m alrededor de tiendas.</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Fuentes: Auditoría interna Google PageSpeed e Informes Regionales de Subway México, Brasil y Perú.</span>
+        <span>DIAPOSITIVA 8 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 9 — ENCUESTA PRIMARIA
+         ======================================================================= -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">Validación con Datos Primarios</div>
+      </div>
+      <div class="slide-body">
+        
+        <div class="grid-2">
+          <!-- COLUMNA IZQUIERDA: PREGUNTAS -->
+          <div class="chart-container">
+            <div class="chart-title">Diseño del cuestionario primario (7 Preguntas)</div>
+            <div class="question-list">
+              
+              <div class="question-item">
+                <!-- Reloj -->
+                <svg class="question-icon" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 11h-4v-2h2V8h2v5z"/></svg>
+                <div class="question-text"><strong>Q1: ¿Con qué frecuencia consume comida rápida a la semana?</strong> <span>(Única respuesta)</span></div>
+              </div>
+
+              <div class="question-item">
+                <!-- Carrito -->
+                <svg class="question-icon" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9.8-12h11.1c.8 0 1.4-.4 1.7-1.1L22 4H5.2L4.3 2H1v2h2.2l3.6 7.6-1.3 2.5c-.2.3-.3.7-.3 1 0 1.1.9 2 2 2h12v-2H8.4c-.1 0-.2-.1-.2-.2l.1-.3L9.2 11z"/></svg>
+                <div class="question-text"><strong>Q2: ¿Por qué canal compra más frecuentemente sus alimentos?</strong> <span>(Canal)</span></div>
+              </div>
+
+              <div class="question-item">
+                <!-- Estrella -->
+                <svg class="question-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <div class="question-text"><strong>Q3: ¿Qué factor es el más decisivo al elegir Subway sobre la competencia?</strong> <span>(Driver)</span></div>
+              </div>
+
+              <div class="question-item">
+                <!-- Billete -->
+                <svg class="question-icon" viewBox="0 0 24 24"><path d="M21 18H3V6h18v12zm-9-8c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"/></svg>
+                <div class="question-text"><strong>Q4: ¿Cuánto gasta promedio por persona en un almuerzo de semana?</strong> <span>(Presupuesto)</span></div>
+              </div>
+
+              <div class="question-item">
+                <!-- Alerta -->
+                <svg class="question-icon" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                <div class="question-text"><strong>Q5: ¿Qué problema o molestia ha experimentado en la app de Subway?</strong> <span>(Fricción)</span></div>
+              </div>
+
+              <div class="question-item">
+                <!-- Calendario -->
+                <svg class="question-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                <div class="question-text"><strong>Q6: ¿Cuál es su ocasión de consumo más recurrente en Subway?</strong> <span>(Ocasión)</span></div>
+              </div>
+
+              <div class="question-item">
+                <!-- Pin -->
+                <svg class="question-icon" viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/></svg>
+                <div class="question-text"><strong>Q7: ¿En qué zona de la ciudad reside o trabaja principalmente?</strong> <span>(Ubicación)</span></div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: TABLA DE RESPUESTAS ESPERADAS -->
+          <div class="chart-container" style="justify-content: flex-start;">
+            <div class="chart-title">Respuestas Esperadas por Arquetipo</div>
+            <div class="table-container">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>Pregunta</th>
+                    <th>Fit-Consciente</th>
+                    <th>Oficinista</th>
+                    <th>Cazador Promos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Q1: Frecuencia</strong></td>
+                    <td>1-2 veces</td>
+                    <td>2-3 veces</td>
+                    <td>3+ veces</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Q2: Canal</strong></td>
+                    <td>Web Móvil / App</td>
+                    <td>Delivery App</td>
+                    <td>Takeout / Físico</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Q3: Driver</strong></td>
+                    <td>Ingredientes/Frescura</td>
+                    <td>Cercanía/Velocidad</td>
+                    <td>Promoción / Precio</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Q4: Presupuesto</strong></td>
+                    <td>COP $25k - $35k</td>
+                    <td>COP $20k - $30k</td>
+                    <td>COP $15k - $20k</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Q5: Fricción</strong></td>
+                    <td>Carga lenta web</td>
+                    <td>Fallo pasarela pago</td>
+                    <td>Sub del Día no desc.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Q6: Ocasión</strong></td>
+                    <td>Almuerzo post-gym</td>
+                    <td>Almuerzo de oficina</td>
+                    <td>Cena grupal barata</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div style="font-size: 9.5px; color: var(--grey-medium); line-height: 1.3; margin-top: 14px;">
+              <strong>Nota metodológica:</strong> Distribución a través de SurveyMonkey / Google Forms. n mínimo sugerido = 80 respuestas válidas. Filtro de perfil: Habitantes de Bogotá, Medellín y Cali entre 18 y 45 años, consumidores de comida rápida.
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Metodología de Validación Primaria (Propuesta Académica).</span>
+        <span>DIAPOSITIVA 9 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 10 — ESTRATEGIA DE COMUNICACIÓN POR ARQUETIPO
+         ======================================================================= -->
+    <div class="slide" id="slide-10">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">De los Datos a la Pauta: Plan de Medios y Creatividad</div>
+      </div>
+      <div class="slide-body">
+        
+        <div class="table-container" style="flex-grow: 1;">
+          <table class="table-custom" style="font-size: 9.5px; height: 100%;">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Arquetipo</th>
+                <th style="width: 15%;">Producto Ancla</th>
+                <th style="width: 15%;">Vehículo</th>
+                <th style="width: 10%;">Formato</th>
+                <th style="width: 25%;">Mensaje Clave</th>
+                <th style="width: 20%;">Geografía / KPI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="highlighted-row">
+                <td><strong>Fit-Consciente<br>(TARGET PRIMARIO)</strong></td>
+                <td>Subway Series Chef (Recetas Balanceadas)</td>
+                <td>Instagram Reels + YouTube 15s</td>
+                <td>Reels 15s ingredientes frescos</td>
+                <td><strong>Funcional-emocional:</strong> "Sabes exactamente lo que comes." Transparencia nutricional.</td>
+                <td><strong>Zonas:</strong> Chapinero, Chicó (Bogotá), El Poblado (Medellín).<br><strong>KPI:</strong> CPV < $150 COP.</td>
+              </tr>
+              <tr>
+                <td><strong>Oficinista Presionado</strong></td>
+                <td>Subway Series Velocidad (Receta Prearmada)</td>
+                <td>Waze Ads + Google Search (11:30 - 13:30)</td>
+                <td>Notificación Waze push + Ad Search</td>
+                <td><strong>Funcional:</strong> Rapidez y cercanía. Almuerzo listo en 5 minutos sin filas.</td>
+                <td><strong>Zonas:</strong> Zonas financieras Bogotá/Medellín (500m radio).<br><strong>KPI:</strong> CTR > 8% en search.</td>
+              </tr>
+              <tr>
+                <td><strong>Cazador de Promos</strong></td>
+                <td>Sub del Día (Precio Entrada)</td>
+                <td>Facebook Feed + WhatsApp Business</td>
+                <td>Carrusel dinámico con precio</td>
+                <td><strong>Promocional:</strong> Foco en valor y precio del día visible en el primer frame.</td>
+                <td><strong>Zonas:</strong> Ciudades intermedias de cobertura periférica.<br><strong>KPI:</strong> CPC < $200 COP.</td>
+              </tr>
+              <tr>
+                <td><strong>Comprador de CC</strong></td>
+                <td>Combo Familiar Compartir (Precio Cerrado)</td>
+                <td>Mupis Digitales (OOH) en CC + IG Stories</td>
+                <td>Video 6s bumper + Stories fines de semana</td>
+                <td><strong>Emocional:</strong> Disfrutar en familia el fin de semana en el centro comercial.</td>
+                <td><strong>Zonas:</strong> Centros comerciales en Bogotá y Cali.<br><strong>KPI:</strong> Crecimiento ticket prom.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Plan de Medios recomendado bajo los estándares de agencias senior (Initiative / Mediabrands).</span>
+        <span>DIAPOSITIVA 10 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 11 — HILO DE STORYTELLING TRANSVERSAL
+         ======================================================================= -->
+    <div class="slide" id="slide-11">
+      <div class="slide-header">
+        <div class="subway-logo-container">
+          <svg class="subway-logo-svg" viewBox="0 0 320 80" width="120">
+            <g font-family="'Inter', sans-serif" font-weight="900" font-style="italic" font-size="56">
+              <text x="10" y="60" fill="#FFC423">SUB</text>
+              <text x="138" y="60" fill="#009B3A">WAY</text>
+            </g>
+            <path d="M 12 18 L 0 30 L 12 42 L 12 34 L 20 34 L 20 26 L 12 26 Z" fill="#FFC423" />
+            <path d="M 282 45 L 294 33 L 282 21 L 282 29 L 274 29 L 274 37 L 282 37 Z" fill="#009B3A" />
+          </svg>
+        </div>
+        <div class="slide-title">Consistencia de la Estrategia (Storytelling)</div>
+      </div>
+      <div class="slide-body">
+        
+        <!-- DIAGRAMA HORIZONTAL SVG -->
+        <div class="chart-container" style="padding: 10px;">
+          <div class="chart-title">El argumento de punta a punta</div>
+          <div class="flow-container">
+            
+            <div class="flow-node">
+              <div class="flow-node-title">Mercado QSR Estancado</div>
+              <div class="flow-node-source">Diap. 3</div>
+            </div>
+
+            <svg class="flow-arrow-svg" viewBox="0 0 40 24"><path d="M5 12h26M23 5l8 7-8 7" fill="none" stroke="#009B3A" stroke-width="2.5"/></svg>
+
+            <div class="flow-node">
+              <div class="flow-node-title">KPI (SOS) Plano sin Reacción</div>
+              <div class="flow-node-source">Diap. 3</div>
+            </div>
+
+            <svg class="flow-arrow-svg" viewBox="0 0 40 24"><path d="M5 12h26M23 5l8 7-8 7" fill="none" stroke="#009B3A" stroke-width="2.5"/></svg>
+
+            <div class="flow-node">
+              <div class="flow-node-title">Sub‑Inversión Digital de 0.94%</div>
+              <div class="flow-node-source">Diap. 3 & 4</div>
+            </div>
+
+            <svg class="flow-arrow-svg" viewBox="0 0 40 24"><path d="M5 12h26M23 5l8 7-8 7" fill="none" stroke="#009B3A" stroke-width="2.5"/></svg>
+
+            <div class="flow-node">
+              <div class="flow-node-title">Consumidor Urbano Desatendido</div>
+              <div class="flow-node-source">Diap. 7</div>
+            </div>
+
+            <svg class="flow-arrow-svg" viewBox="0 0 40 24"><path d="M5 12h26M23 5l8 7-8 7" fill="none" stroke="#009B3A" stroke-width="2.5"/></svg>
+
+            <div class="flow-node">
+              <div class="flow-node-title">Fricción en Conversión Digital</div>
+              <div class="flow-node-source">Diap. 8</div>
+            </div>
+
+            <svg class="flow-arrow-svg" viewBox="0 0 40 24"><path d="M5 12h26M23 5l8 7-8 7" fill="none" stroke="#009B3A" stroke-width="2.5"/></svg>
+
+            <div class="flow-node" style="border-color: var(--yellow-subway); background-color: var(--yellow-soft);">
+              <div class="flow-node-title" style="font-weight: 900;">Rebalanceo al Target Primario</div>
+              <div class="flow-node-source" style="background-color: var(--yellow-subway); color: var(--black);">Diap. 10</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CHECKLIST DE COHERENCIA -->
+        <div class="checklist-container">
+          <div class="checklist-item">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="#009B3A"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            <span>La hipótesis inicial de Fase 1 (descalce e ineficiencia) guía cada recomendación de la Fase 6.</span>
+          </div>
+          <div class="checklist-item">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="#009B3A"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            <span>Los arquetipos priorizados en Fase 2 reciben la pauta táctica recomendada.</span>
+          </div>
+          <div class="checklist-item">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="#009B3A"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            <span>El diagnóstico del GeoMap explica la ceguera digital de la marca en mercados clave del PIB.</span>
+          </div>
+          <div class="checklist-item">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="#009B3A"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            <span>El desbalance de SOI explica por qué la captación de búsqueda es inestable y desaprovechada.</span>
+          </div>
+          <div class="checklist-item" style="grid-column: span 2;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="#009B3A"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            <span>El plan de medios y los copies propuestos resuelven directamente las barreras de conversión digital de la marca.</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="slide-footer">
+        <span>Evaluación de Consistencia Metodológica del Proyecto.</span>
+        <span>DIAPOSITIVA 11 / 12</span>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         DIAPOSITIVA 12 — CIERRE
+         ======================================================================= -->
+    <div class="slide bg-black" id="slide-12">
+      <div></div>
+      <div class="cierre-content">
+        <div class="cierre-title">Subway no necesita más presupuesto.</div>
+        <div class="cierre-highlight">Necesita redistribuirlo.</div>
+        <div class="cierre-text">
+          Con el mismo dinero que hoy se invierte en televisión nacional ineficiente, Subway puede capturar al consumidor urbano de alto valor en el momento exacto de decisión, eliminar la fricción digital, y superar el <strong>12% de Share of Search</strong> en los tres mercados que concentran el <strong>70% del valor total</strong> de la categoría.
+        </div>
+        <div class="portada-divider"></div>
+      </div>
+      <div class="slide-footer dark-footer">
+        <span>Fuentes del Proyecto: Euromonitor / DANE / Fedesarrollo / Google Trends / Infoanálisis / Admetricks / Meta Audience Insights 2026.</span>
+        <span>DIAPOSITIVA 12 / 12</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NAVEGACIÓN Y CONTROLES OVERLAY -->
+  <div class="controls-overlay">
+    <button class="control-btn" id="prev-btn" title="Anterior (←)">←</button>
+    <button class="control-btn" id="next-btn" title="Siguiente (→)">→</button>
+    <button class="control-btn" id="fullscreen-btn" title="Pantalla Completa">[ ]</button>
+  </div>
+
+  <!-- JAVASCRIPT DE CONTROL DE PRESENTACIÓN -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    // Configurar Barra de Progreso
+    const progressBar = document.getElementById('progress-bar');
+    for (let i = 1; i <= totalSlides; i++) {
+      const segment = document.createElement('div');
+      segment.classList.add('progress-segment');
+      if (i === 1) segment.classList.add('current');
+      segment.id = `progress-seg-${i}`;
+      progressBar.appendChild(segment);
+    }
+
+    // Cambiar Diapositiva
+    function goToSlide(n) {
+      if (n < 1 || n > totalSlides) return;
+      
+      // Quitar active de actual
+      document.querySelector('.slide.active').classList.remove('active');
+      // Añadir active a nueva
+      slides[n - 1].classList.add('active');
+
+      // Actualizar Barra de Progreso
+      for (let i = 1; i <= totalSlides; i++) {
+        const seg = document.getElementById(`progress-seg-${i}`);
+        seg.className = 'progress-segment'; // Reset
+        if (i < n) {
+          seg.classList.add('active');
+        } else if (i === n) {
+          seg.classList.add('current');
+        }
+      }
+
+      currentSlide = n;
+    }
+
+    // Botones de control
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      goToSlide(currentSlide - 1);
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      goToSlide(currentSlide + 1);
+    });
+
+    // Teclado (Flechas ← y →)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        goToSlide(currentSlide - 1);
+      } else if (e.key === 'ArrowRight' || e.key === ' ') {
+        goToSlide(currentSlide + 1);
+      }
+    });
+
+    // Pantalla Completa
+    const container = document.querySelector('.presentation-container');
+    document.getElementById('fullscreen-btn').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(err => {
+          console.error(`Error al intentar modo pantalla completa: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Escalado de la Presentación para mantener Relación 16:9
+    function scalePresentation() {
+      const targetWidth = 1280;
+      const targetHeight = 720;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      const scaleX = windowWidth / targetWidth;
+      const scaleY = windowHeight / targetHeight;
+      const scale = Math.min(scaleX, scaleY);
+
+      // Si estamos en pantalla completa o la ventana es pequeña, escalar
+      container.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener('resize', scalePresentation);
+    window.addEventListener('load', scalePresentation);
+
+    // Ajuste inicial
+    scalePresentation();
+
+  </script>
+</body>
+</html>
